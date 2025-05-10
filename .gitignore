@@ -1,0 +1,34 @@
+node_modules/
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Diretórios de builds
+dist/
+build/
+
+# Diretórios de testes
+coverage/
+
+# Arquivos de ambiente
+.env.local
+.env.*.local
+
+# Sistema de arquivos do editor
+.vscode/
+.idea/
+
+# Arquivos do OS
+.DS_Store
+Thumbs.db
+
+# Arquivos de pacotes (gerenciadores de dependências)
+package-lock.json
+yarn.lock
+
+# Arquivos do IDE (IntelliJ, WebStorm, etc.)
+*.iml
