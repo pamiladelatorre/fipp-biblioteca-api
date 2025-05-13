@@ -15,8 +15,7 @@ build/
 coverage/
 
 # Arquivos de ambiente
-.env.local
-.env.*.local
+.env
 
 # Sistema de arquivos do editor
 .vscode/
