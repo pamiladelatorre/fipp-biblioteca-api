@@ -3,12 +3,8 @@ import Autor from '../models/Autor.js';
 
 class AutorDAO extends BaseDAO {
     constructor() {
-        if (AutorDAO.#instance) return AutorDAO.#instance;
         super("autores");
-        AutorDAO.#instance = this;
     }
-
-    static #instance;
 
     static getInstance() {
       return BaseDAO.getInstance(AutorDAO);

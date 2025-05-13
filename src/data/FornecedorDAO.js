@@ -5,12 +5,8 @@ import { transaction, query } from '../infra/database.js';
 
 class FornecedorDAO extends BaseDAO {
     constructor() {
-        if (FornecedorDAO.#instance) return FornecedorDAO.#instance;
         super("fornecedores");
-        FornecedorDAO.#instance = this;
     }
-
-    static #instance;
 
     static getInstance() {
       return BaseDAO.getInstance(FornecedorDAO);

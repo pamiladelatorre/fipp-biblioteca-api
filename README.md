@@ -28,25 +28,24 @@ API RESTful desenvolvida com Node.js e Express para o sistema de biblioteca da F
 
 ---
 
-## 📂 Estrutura de Diretórios
+## 📁 Estrutura de pastas
 
+```
 src/
-├── config/ # Arquivos de configuração (banco, etc.)
-├── controllers/ # Lógica de entrada das rotas
-├── data/ # DAO
-├── infra/ # Integrações com serviços externos, DB
-├── middlewares/ # Middlewares de autenticação, log, etc.
-├── models/ # Definição dos modelos (ORM/ODM)
-├── routes/ # Definição de rotas da aplicação
-├── services/ # Lógica de negócios central
-├── utils/ # Funções utilitárias
-├── validations/ # Schemas e validações de entrada
-├── .env # Variáveis de ambiente
-├── app.js # Configuração da aplicação
-├── server.js # Ponto de entrada principal (start do servidor)
-└── package.json # Gerenciador de dependências
-
----
+  config/           # Configurações
+  controllers/      # Requisições
+  data/             # Dados mock
+  infra/            # DB e serviços externos
+  middlewares/      # Autenticação, etc.
+  models/           # Schemas/ORM
+  routes/           # Rotas Express
+  services/         # Regras de negócio
+  utils/            # Helpers
+  validations/      # Joi/Yup
+app.js              # Monta a app Express
+server.js           # Inicia o servidor
+.env                # Variáveis de ambiente
+```
 
 ## 🚀 Como executar localmente
 
@@ -54,11 +53,22 @@ src/
 ```bash
 git clone https://github.com/seu-usuario/unitech-biblioteca-api.git
 cd unitech-biblioteca-api
+```
 
+### 2. Instale as dependências
+```bash
 npm install
+```
 
+### 3. Configure as variáveis de ambiente
+```bash
 PORT=3000
 DATABASE_URL=mongodb://localhost:27017/biblioteca
 JWT_SECRET=minha_chave_secreta
+```
 
+### 4. Inicie o servidor
+```bash
 npm run dev
+```
+A API estará disponível em: http://localhost:3000

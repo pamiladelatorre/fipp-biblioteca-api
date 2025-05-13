@@ -7,7 +7,7 @@ class CompraItem extends Entity {
   
   constructor(id, acervoId, quantidade, valorUnitario, dataCriacao) {
     if (new.target !== CompraItem) {
-      throw new Error(`Use ${new.target.name}.criar()`);
+      throw new Error(`Use ${this.constructor.name}.criar()`);
     }
     super(id, dataCriacao);
     this.#acervoId = acervoId;
@@ -21,7 +21,7 @@ class CompraItem extends Entity {
   get valorUnitario() { return this.#valorUnitario; }
 
   // Fábrica para criação
-  static criar(acervoId, quantidade, valorUnitario) {
+  static criar({ acervoId, quantidade, valorUnitario }) {
     return new CompraItem(null, acervoId, quantidade, valorUnitario, new Date());
   }
 }

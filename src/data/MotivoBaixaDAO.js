@@ -3,12 +3,8 @@ import MotivoBaixa from '../models/MotivoBaixa.js';
 
 class MotivoBaixaDAO extends BaseDAO  {
     constructor() {
-        if (MotivoBaixaDAO.#instance) return MotivoBaixaDAO.#instance;
         super("motivos_baixas");
-        MotivoBaixaDAO.#instance = this;
     }
-
-    static #instance;
 
     static getInstance() {
       return BaseDAO.getInstance(MotivoBaixaDAO);

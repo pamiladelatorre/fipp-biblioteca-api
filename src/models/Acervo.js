@@ -11,10 +11,32 @@ class Acervo extends Entity {
   #numeroPagina;
   #isbn;
   #ativo;
+
+  // Relacionamentos
+  #autor;
+  #genero;
+  #categoria;
   
-  constructor(id, autorId, generoId, categoriaId, titulo, numeroEdicao, editora, dataPublicacao, numeroPagina, isbn, ativo, dataCriacao, dataAlteracao) {
+  constructor(
+    id, 
+    autorId, 
+    generoId, 
+    categoriaId, 
+    titulo, 
+    numeroEdicao, 
+    editora, 
+    dataPublicacao, 
+    numeroPagina, 
+    isbn, 
+    ativo, 
+    dataCriacao, 
+    dataAlteracao,
+    autor = null,
+    genero = null,
+    categoria = null
+  ) {
     if (new.target !== Acervo) {
-      throw new Error(`Use ${new.target.name}.criar()`);
+      throw new Error(`Use ${this.constructor.name}.criar()`);
     }
     super(id, dataCriacao, dataAlteracao);
     this.#autorId = autorId;
@@ -27,6 +49,9 @@ class Acervo extends Entity {
     this.#numeroPagina = numeroPagina;
     this.#isbn = isbn;
     this.#ativo = ativo;
+    this.#autor = autor;
+    this.#genero = genero;
+    this.#categoria = categoria; 
   }
   
   // Getters
@@ -40,9 +65,14 @@ class Acervo extends Entity {
   get numeroPagina() { return this.#numeroPagina; }
   get isbn() { return this.#isbn; }
   get ativo() { return this.#ativo; }
+
+  // Relacionamentos
+  get autor() { return this.#autor; }
+  get genero() { return this.#genero; }
+  get categoria() { return this.#categoria; }
   
   // Alteração dos dados
-  alterar(autorId, generoId, categoriaId, titulo, numeroEdicao, editora, dataPublicacao, numeroPagina, isbn) {
+  alterar({ autorId, generoId, categoriaId, titulo, numeroEdicao, editora, dataPublicacao, numeroPagina, isbn }) {
     this.#autorId = autorId;
     this.#generoId = generoId;
     this.#categoriaId = categoriaId;
@@ -53,6 +83,9 @@ class Acervo extends Entity {
     this.#numeroPagina = numeroPagina;
     this.#isbn = isbn;
     this.dataAlteracao = new Date();
+    this.#autor = null;
+    this.#genero = null;
+    this.#categoria = null; 
   }
 
   // Alteração do status ativo
@@ -62,7 +95,7 @@ class Acervo extends Entity {
   }
   
   // Fábrica para criação
-  static criar(autorId, generoId, categoriaId, titulo, numeroEdicao, editora, dataPublicacao, numeroPagina, isbn) {
+  static criar({ autorId, generoId, categoriaId, titulo, numeroEdicao, editora, dataPublicacao, numeroPagina, isbn }) {
     return new Acervo(
       null,
       autorId,

@@ -12,7 +12,7 @@ class Assinatura extends Entity {
   
   constructor(id, fornecedorId, descricao, periodicidade, numeroContrato, valor, dataInicio, dataFim, ativo, dataCriacao, dataAlteracao) {
     if (new.target !== Assinatura) {
-      throw new Error(`Use ${new.target.name}.criar()`);
+      throw new Error(`Use ${this.constructor.name}.criar()`);
     }
     super(id, dataCriacao, dataAlteracao);
     this.#fornecedorId = fornecedorId;
@@ -36,7 +36,7 @@ class Assinatura extends Entity {
   get ativo() { return this.#ativo; }
   
   // Alteração dos dados
-  alterar(fornecedorId, descricao, periodicidade, numeroContrato, valor, dataInicio, dataFim) {
+  alterar({ fornecedorId, descricao, periodicidade, numeroContrato, valor, dataInicio, dataFim }) {
     this.#fornecedorId = fornecedorId;
     this.#descricao = descricao;
     this.#periodicidade = periodicidade;
@@ -53,7 +53,7 @@ class Assinatura extends Entity {
   }
 
   // Fábrica para criação
-  static criar(fornecedorId, descricao, periodicidade, numeroContrato, valor, dataInicio, dataFim) {
+  static criar({ fornecedorId, descricao, periodicidade, numeroContrato, valor, dataInicio, dataFim }) {
     return new Assinatura(null, fornecedorId, descricao, periodicidade, numeroContrato, valor, dataInicio, dataFim, true, new Date(), null);
   }
 }

@@ -17,7 +17,7 @@ class Fornecedor extends Entity {
   
   constructor(id, cnpj, razaoSocial, telefone, email, endereco, incricaoEstadual, representante, ativo, dataCriacao, dataAlteracao) {
     if (new.target !== Fornecedor) {
-      throw new Error(`Use ${new.target.name}.criar()`);
+      throw new Error(`Use ${this.constructor.name}.criar()`);
     }
     super(id, dataCriacao, dataAlteracao);
     this.#cnpj = cnpj;
@@ -45,7 +45,7 @@ class Fornecedor extends Entity {
   get generos() { return this.#generos; }
   
   // Alteração dos dados
-  alterar(cnpj, razaoSocial, telefone, email, endereco, incricaoEstadual, representante, ativo) {
+  alterar({ cnpj, razaoSocial, telefone, email, endereco, incricaoEstadual, representante, ativo }) {
     this.#cnpj = cnpj;
     this.#razaoSocial = razaoSocial;
     this.#telefone = telefone;
@@ -91,7 +91,7 @@ class Fornecedor extends Entity {
   }
   
   // Fábrica para criação
-  static criar(cnpj, razaoSocial, telefone, email, endereco, incricaoEstadual, representante) {
+  static criar({ cnpj, razaoSocial, telefone, email, endereco, incricaoEstadual, representante }) {
     return new Fornecedor(null, cnpj, razaoSocial, telefone, email, endereco, incricaoEstadual, representante, true, new Date(), null);
   }
 }

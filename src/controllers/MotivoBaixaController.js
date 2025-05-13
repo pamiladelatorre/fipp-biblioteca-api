@@ -19,7 +19,7 @@ class MotivoBaixaController {
     // Alterar motivo baixa pelo ID
     alterar = asyncWrapper(async (req, res) => {
         const { id } = req.params;
-        const result = await MotivoBaixaService.alterar({ id, ...req.body });
+        const result = await MotivoBaixaService.alterar(id, req.body);
         return handleResult(result, res); // 200: Success
     });
 

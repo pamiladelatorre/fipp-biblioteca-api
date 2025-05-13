@@ -5,9 +5,9 @@ class Entity {
   #dataCriacao;
   #dataAlteracao;
 
-  constructor(id, dataCriacao, dataAlteracao = null) {
+  constructor(id, dataCriacao, dataAlteracao) {
     if (new.target === Entity) {
-      throw new Error(`Classe abstrata '${new.target.name}' não pode ser instanciada diretamente.`);
+      throw new Error(`Classe abstrata '${this.constructor.name}' não pode ser instanciada diretamente.`);
     }
     this.#id = id;
     this.#dataCriacao = dataCriacao;

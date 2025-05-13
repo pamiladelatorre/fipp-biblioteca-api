@@ -6,7 +6,7 @@ import { Result } from '../utils/Result.js';
 
 
 class UsuarioService {
-    async adicionar({ cpf, nome, dataNascimento, telefone, email, cep, endereco, tipoUsuario }){
+    async adicionar(payload){
         let usuario = await UsuarioDAO.buscarPorCpf(cpf);
         if(usuario)
             return Result.fail(errorFactory('Conflict', 'CPF já cadastrado.'));
@@ -18,7 +18,7 @@ class UsuarioService {
         const salt = await bcrypt.genSalt(10);
         const hashSenha = await bcrypt.hash(cpf, salt)
 
-        const novoUsuario = Usuario.criar(cpf, nome, dataNascimento, telefone, email, hashSenha, cep, endereco, tipoUsuario);
+        const novoUsuario = Usuario.criar({ ...payload, senha: hashSenha });
         usuario = await UsuarioDAO.inserir(novoUsuario);
        
         return Result.ok(usuario);
@@ -29,12 +29,12 @@ class UsuarioService {
         return notFoundIfNull(usuario, 'Usuario');
     }
 
-    async alterar({ id, cpf, nome, dataNascimento, telefone, email, senha, cep, endereco, tipoUsuario }){
+    async alterar(payload){
         const usuario = await UsuarioDAO.buscarPorId(id);
         const validacao = notFoundIfNull(usuario, 'Usuario');
         if (validacao.isFailure) return validacao;
 
-        usuario.alterar(cpf, nome, dataNascimento, telefone, email, senha, cep, endereco, tipoUsuario);
+        usuario.alterar({ ...payload });
         await UsuarioDAO.atualizar(usuario);
         return Result.ok(usuario);
     }

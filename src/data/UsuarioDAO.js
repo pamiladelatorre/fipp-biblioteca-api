@@ -4,12 +4,8 @@ import { query } from '../infra/database.js';
 
 class UsuarioDAO extends BaseDAO {
     constructor() {
-        if (UsuarioDAO.#instance) return UsuarioDAO.#instance;
         super("usuarios");
-        UsuarioDAO.#instance = this;
     }
-
-    static #instance;
 
     static getInstance() {
       return BaseDAO.getInstance(UsuarioDAO);

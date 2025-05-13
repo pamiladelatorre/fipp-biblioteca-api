@@ -4,8 +4,8 @@ import { notFoundIfNull, notFoundIfEmpty, normalizeToBit } from '../utils/Servic
 import { Result } from '../utils/Result.js';
 
 class GeneroService {
-    async adicionar({ descricao }){
-        const novoGenero = Genero.criar(descricao);
+    async adicionar(payload){
+        const novoGenero = Genero.criar({ ...payload });
         const genero = await GeneroDAO.inserir(novoGenero);
         return Result.ok(genero);
     }
@@ -15,12 +15,12 @@ class GeneroService {
         return notFoundIfNull(genero, 'Genero');
     }
 
-    async alterar({ id, descricao, ativo }){
+    async alterar(id, payload){
         const genero = await GeneroDAO.buscarPorId(id);
         const validacao = notFoundIfNull(genero, 'Genero');
         if (validacao.isFailure) return validacao;
 
-        genero.alterar(descricao, ativo);
+        genero.alterar({ ...payload });
         await GeneroDAO.atualizar(genero);
         return Result.ok(genero);
     }

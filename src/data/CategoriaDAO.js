@@ -3,12 +3,8 @@ import Categoria from '../models/Categoria.js';
 
 class CategoriaDAO extends BaseDAO {
     constructor() {
-        if (CategoriaDAO.#instance) return CategoriaDAO.#instance; // Singleton interno: impede múltiplas instâncias mesmo com "new"
-        super("categorias"); // Passando nome da tabela para o construtor do BaseDAO
-        CategoriaDAO.#instance = this; // Armazena a instância
+        super("categorias"); // Nome da tabela
     }
-
-    static #instance;
 
     static getInstance() {
       return BaseDAO.getInstance(CategoriaDAO);

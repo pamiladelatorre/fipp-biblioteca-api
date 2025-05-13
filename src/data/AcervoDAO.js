@@ -1,14 +1,14 @@
 import BaseDAO from './BaseDAO.js';
+import { query } from '../infra/database.js';
 import Acervo from '../models/Acervo.js';
+import Autor from '../models/Autor.js';
+import Genero from '../models/Genero.js';
+import Categoria from '../models/Categoria.js';
 
 class AcervoDAO extends BaseDAO {
     constructor() {
-        if (AcervoDAO.#instance) return AcervoDAO.#instance; // Singleton interno: impede múltiplas instâncias mesmo com "new"
-        super("categorias"); // Passando nome da tabela para o construtor do BaseDAO
-        AcervoDAO.#instance = this; // Armazena a instância
+        super("acervos"); // Nome da tabela
     }
-
-    static #instance;
 
     static getInstance() {
       return BaseDAO.getInstance(AcervoDAO);
@@ -28,9 +28,30 @@ class AcervoDAO extends BaseDAO {
             row.isbn,
             row.ativo, 
             row.data_criacao, 
-            row.data_alteracao
+            row.data_alteracao,
+            new Autor(row.autor_id, row.autor),
+            new Genero(row.genero_id, row.genero),
+            new Categoria(row.categoria_id, row.categoria)
         );
     } 
+
+    async buscarPorId(id) {
+        const sql = `
+            SELECT 
+                ac.*,
+                au.nome AS autor,
+                g.descricao AS genero,
+                c.descricao AS categoria
+            FROM acervos ac
+                INNER JOIN autores au ON au.id = ac.autor_id
+                INNER JOIN generos g ON g.id = ac.genero_id
+                INNER JOIN categorias c ON c.id = ac.categoria_id
+            WHERE
+                ac.id = ?`;
+
+        const [row] = await query(sql, [id]);
+        return row ? this.mapRowToEntity(row) : null;
+    }
 }
 
 // Exporta instância padrão

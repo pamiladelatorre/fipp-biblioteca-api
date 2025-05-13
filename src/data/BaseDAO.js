@@ -1,4 +1,5 @@
 import { query, execute } from '../infra/database.js';
+import Entity from '../models/Entity.js';
 import { extractEntityDataForDb } from "../utils/extractEntityDataForDb.js";
 
 export default class BaseDAO {
@@ -22,24 +23,26 @@ export default class BaseDAO {
         let sql = `SELECT * FROM ${this.tabela}`;
         const valores = [];
     
-        if (Object.keys(filtro).length) {
-        const condicoes = Object.entries(filtro).map(([campo, config]) => {
-            const { valor, like = false } = typeof config === 'object' && config !== null
-            ? config
-            : { valor: config };
+        const condicoes = [];
     
+        for (const [campo, config] of Object.entries(filtro)) {
+            const { valor, like = false } = 
+                (typeof config === 'object' && config !== null)
+                ? config
+                : { valor: config };
+    
+            condicoes.push(`${campo} ${like ? 'LIKE' : '='} ?`);
             valores.push(like ? `%${valor}%` : valor);
-            return `${campo} ${like ? 'LIKE' : '='} ?`;
-        });
+        }
     
-        sql += ` WHERE ${condicoes.join(' AND ')}`;
+        if (condicoes.length > 0) {
+            sql += ` WHERE ${condicoes.join(' AND ')}`;
         }
     
         const rows = await query(sql, valores);
         return rows.map(row => this.mapRowToEntity(row));
     }
   
-
     async inserir(model, conn = null) {
         if (!(model instanceof Entity)) {
             throw new Error("Instância de entidade inválida.");
@@ -81,12 +84,6 @@ export default class BaseDAO {
         if (resultado.affectedRows === 0) return null;
 
         return model;
-    }
-  
-    async remover(id, conn = null) {
-        const sql = `DELETE FROM ${this.tabela} WHERE id = ?`;
-        const resultado = await execute(sql, [id], conn);
-        return resultado.affectedRows > 0;
     }
       
     /**

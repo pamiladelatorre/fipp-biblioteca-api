@@ -4,8 +4,8 @@ import { notFoundIfNull, notFoundIfEmpty, normalizeToBit } from '../utils/Servic
 import { Result } from '../utils/Result.js';
 
 class MotivoBaixaService {
-    async adicionar({ descricao }){
-        const novoMotivoBaixa = MotivoBaixa.criar(descricao);
+    async adicionar(payload){
+        const novoMotivoBaixa = MotivoBaixa.criar({ ...payload });
         const motivoBaixa = await MotivoBaixaDAO.inserir(novoMotivoBaixa);
         return Result.ok(motivoBaixa);
     }
@@ -15,12 +15,12 @@ class MotivoBaixaService {
         return notFoundIfNull(motivoBaixa, 'Motivo baixa');
     }
 
-    async alterar({ id, descricao, ativo }){
+    async alterar(id, payload){
         const motivoBaixa = await MotivoBaixaDAO.buscarPorId(id);
         const validacao = notFoundIfNull(motivoBaixa, 'Motivo baixa');
         if (validacao.isFailure) return validacao;
 
-        motivoBaixa.atualizar(descricao, ativo);
+        motivoBaixa.atualizar({ ...payload });
         await MotivoBaixaDAO.atualizar(motivoBaixa);
         return Result.ok();
     }

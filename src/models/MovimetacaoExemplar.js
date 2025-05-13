@@ -14,7 +14,7 @@ class MovimetacaoExemplar extends Entity {
 
     constructor(id, exemplarId, usuarioId, etapa, status, grupoId, referenciaId, dataInicio, dataPrevista, dataFim, numeroRenovacao) {
         if (new.target !== MovimetacaoExemplar) {
-            throw new Error(`Use ${new.target.name}.criar()`);
+            throw new Error(`Use ${this.constructor.name}.criar()`);
         }
         super(id, dataCriacao, dataAlteracao);
         this.#exemplarId = exemplarId;
@@ -42,7 +42,7 @@ class MovimetacaoExemplar extends Entity {
     get numeroRenovacao() { return this.#numeroRenovacao; }
 
     // Fábrica para criação
-    static criar(exemplarId, usuarioId, etapa) {
+    static criar({ exemplarId, usuarioId, etapa }) {
         return new MovimetacaoExemplar(
             null, 
             exemplarId, 

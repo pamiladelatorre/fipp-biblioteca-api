@@ -4,8 +4,8 @@ import { notFoundIfNull, notFoundIfEmpty, normalizeToBit } from '../utils/Servic
 import { Result } from '../utils/Result.js';
 
 class AcervoService {
-    async adicionar({ categoria, autor, genero, titulo, numeroEdicao, editora, dataPublicacao, numeroPagina, isbn }){
-        const novoAcervo = Acervo.criar(categoria, autor, genero, titulo, numeroEdicao, editora, dataPublicacao, numeroPagina, isbn);
+    async adicionar(payload){
+        const novoAcervo = Acervo.criar({ ...payload });
         const acervo = await AcervoDAO.inserir(novoAcervo);
         return Result.ok(acervo);
     }
@@ -15,12 +15,12 @@ class AcervoService {
         return notFoundIfNull(acervo, 'Acervo');
     }
 
-    async alterar({ id, categoria, autor, genero, titulo, numeroEdicao, editora, dataPublicacao, numeroPagina, isbn }){
+    async alterar(id, payload){
         const acervo = await AcervoDAO.buscarPorId(id);
         const validacao = notFoundIfNull(acervo, 'Acervo');
         if (validacao.isFailure) return validacao;
 
-        acervo.alterar(categoria, autor, genero, titulo, numeroEdicao, editora, dataPublicacao, numeroPagina, isbn)
+        acervo.alterar({ ...payload })
         await AcervoDAO.atualizar(acervo);
         return Result.ok(acervo);
     }

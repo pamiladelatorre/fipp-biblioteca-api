@@ -4,8 +4,8 @@ import { notFoundIfNull, notFoundIfEmpty, normalizeToBit } from '../utils/Servic
 import { Result } from '../utils/Result.js';
 
 class FornecedorService {
-    async adicionar({ cnpj, razaoSocial, telefone, email, endereco, inscricaoEstadual, representante }){
-        const novoFornecedor = Fornecedor.criar(cnpj, razaoSocial, telefone, email, endereco, inscricaoEstadual, representante);
+    async adicionar(payload){
+        const novoFornecedor = Fornecedor.criar({ ...payload });
         const fornecedor = await FornecedorDAO.inserir(novoFornecedor);
         return Result.ok(fornecedor);
     }
@@ -15,12 +15,12 @@ class FornecedorService {
         return notFoundIfNull(fornecedor, 'Fornecedor');
     }
 
-    async alterar({ id, cnpj, razaoSocial, telefone, email, endereco, inscricaoEstadual, representante }){
+    async alterar(id, payload){
         const fornecedor = await FornecedorDAO.buscarPorId(id);
         const validacao = notFoundIfNull(categoria, 'Fornecedor');
         if (validacao.isFailure) return validacao;
 
-        fornecedor.alterar(cnpj, razaoSocial, telefone, email, endereco, inscricaoEstadual, representante);
+        fornecedor.alterar({ ...payload });
         await FornecedorDAO.atualizar(fornecedor)
         return Result.ok(fornecedor);
     }

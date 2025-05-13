@@ -25,7 +25,7 @@ class MetodoPagamento extends Entity {
   
   constructor(id, fornecedorId, tipoPagamento, prazo, tipoDesconto, chavePix, banco, agencia, conta, dataCriacao, dataAlteracao) {
     if (new.target !== MetodoPagamento) {
-      throw new Error(`Use ${new.target.name}.criar() ou ${new.target.name}.fromDbRow()`);
+      throw new Error(`Use ${this.constructor.name}.criar()`);
     }
     super(id, dataCriacao, dataAlteracao);
     this.#fornecedorId = fornecedorId;
@@ -49,7 +49,7 @@ class MetodoPagamento extends Entity {
   get conta() { return this.#conta; }
   
   // Alteração dos dados
-  alterar(fornecedorId, tipoPagamento, prazo, tipoDesconto, chavePix, banco, agencia, conta) {
+  alterar({ fornecedorId, tipoPagamento, prazo, tipoDesconto, chavePix, banco, agencia, conta }) {
     this.#fornecedorId = fornecedorId;
     this.#tipoPagamento = tipoPagamento;
     this.#prazo = prazo;
@@ -62,7 +62,7 @@ class MetodoPagamento extends Entity {
   }
 
   // Fábrica para criação
-  static criar(fornecedorId, tipoPagamento, prazo, tipoDesconto, chavePix, banco, agencia, conta) {
+  static criar({ fornecedorId, tipoPagamento, prazo, tipoDesconto, chavePix, banco, agencia, conta }) {
     return new MetodoPagamento(null, fornecedorId, tipoPagamento, prazo, tipoDesconto, chavePix, banco, agencia, conta, true, new Date(), null);
   }
 }

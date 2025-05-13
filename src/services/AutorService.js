@@ -4,8 +4,8 @@ import { notFoundIfNull, notFoundIfEmpty, normalizeToBit  } from '../utils/Servi
 import { Result } from '../utils/Result.js';
 
 class AutorService {
-    async adicionar({ nome, nacionalidade, dataNascimento, biografia }){
-        const novoAutor = Autor.criar(nome, nacionalidade, dataNascimento, biografia);
+    async adicionar(payload){
+        const novoAutor = Autor.criar({ ...payload });
         const autor = await AutorDAO.inserir(novoAutor);
         return Result.ok(autor);
     }
@@ -15,12 +15,12 @@ class AutorService {
         return notFoundIfNull(autor, 'Autor');
     }
 
-    async alterar({ id, nome, nacionalidade, dataNascimento, biografia, ativo }){
+    async alterar(id, payload){
         const autor = await AutorDAO.buscarPorId(id);
         const validacao = notFoundIfNull(autor, 'Autor');
         if (validacao.isFailure) return validacao;
 
-        autor.alterar(nome, nacionalidade, dataNascimento, biografia, ativo);
+        autor.alterar({ ...payload });
         await AutorDAO.atualizar(autor);
         return Result.ok(autor);
     }

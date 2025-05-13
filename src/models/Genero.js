@@ -7,7 +7,7 @@ class Genero extends Entity {
 
   constructor(id, descricao, ativo, dataCriacao, dataAlteracao) {
     if (new.target !== Genero) {
-      throw new Error(`Use ${new.target.name}.criar()`);
+      throw new Error(`Use ${this.constructor.name}.criar()`);
     }
     super(id, dataCriacao, dataAlteracao);    
     this.#descricao = descricao;
@@ -19,7 +19,7 @@ class Genero extends Entity {
   get ativo() { return this.#ativo; }
   
   // Alteração dos dados
-  alterar(descricao, ativo) {
+  alterar({ descricao, ativo }) {
     this.#descricao = descricao;
     this.#ativo = ativo;
     this.dataAlteracao = new Date();
@@ -32,7 +32,7 @@ class Genero extends Entity {
   }
   
   // Fábrica para criação
-  static criar(descricao) {
+  static criar({ descricao }) {
     return new Genero(null, descricao, true, new Date(), null);
   }
 }

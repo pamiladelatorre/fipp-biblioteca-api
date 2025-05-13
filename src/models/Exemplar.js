@@ -9,7 +9,7 @@ class Exemplar  extends Entity{
   
   constructor(id, acervoId, entradaAcervoId, tombo, status, estado, dataCriacao, dataAlteracao) {
     if (new.target !== Categoria) {
-      throw new Error(`Use ${new.target.name}.criar()`);
+      throw new Error(`Use ${this.constructor.name}.criar()`);
     }
     super(id, dataCriacao, dataAlteracao);
     this.#acervoId = acervoId;
@@ -33,7 +33,7 @@ class Exemplar  extends Entity{
   }
 
   // Fábrica para criação
-  static criar(acervoId, entradaAcervoId, estado) {
+  static criar({ acervoId, entradaAcervoId, estado }) {
     let tombo = '314sd5'; //logica para gerar numero de tombo
     return new Exemplar(null, acervoId, entradaAcervoId, tombo, 'disponivel', estado, new Date(), null);
   }

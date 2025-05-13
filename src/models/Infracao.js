@@ -12,7 +12,7 @@ class Infracao extends Entity {
   
   constructor(id, usuarioId, tipoInfracao, grauInfracao, status, motivo, dataInicio, dataFim, dataCriacao, dataAlteracao) {
     if (new.target !== Infracao) {
-      throw new Error(`Use ${new.target.name}.criar() ou ${new.target.name}.fromDbRow()`);
+      throw new Error(`Use ${this.constructor.name}.criar()`);
     }
     super(id, dataCriacao, dataAlteracao);
     this.#usuarioId = usuarioId;
@@ -34,7 +34,7 @@ class Infracao extends Entity {
   get dataFim() { return this.#dataFim; }
   
   // Alteração dos dados
-  alterar(tipoInfracao, grauInfracao, motivo, dataFim) {
+  alterar({ tipoInfracao, grauInfracao, motivo, dataFim }) {
     this.#tipoInfracao = tipoInfracao;
     this.#grauInfracao = grauInfracao;
     this.#motivo = motivo;
@@ -43,7 +43,7 @@ class Infracao extends Entity {
   }
 
   // Fábrica para criação
-  static criar(usuarioId, tipoInfracao, grauInfracao, motivo, dataInicio, dataFim) {
+  static criar({ usuarioId, tipoInfracao, grauInfracao, motivo, dataInicio, dataFim }) {
     return new Infracao(null, usuarioId, tipoInfracao, grauInfracao, 'pendente', motivo, dataInicio, dataFim, true, new Date(), null);
   }
 }

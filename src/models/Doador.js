@@ -11,7 +11,7 @@ class Doador extends Entity  {
   
   constructor(id, tipoPessoa, nome, documento, email, telefone, endereco, ativo, dataCriacao, dataAlteracao) {
     if (new.target !== Doador) {
-      throw new Error(`Use ${new.target.name}.criar()`);
+      throw new Error(`Use ${this.constructor.name}.criar()`);
     }
     super(id, dataCriacao, dataAlteracao);
     this.#tipoPessoa = tipoPessoa;
@@ -33,7 +33,7 @@ class Doador extends Entity  {
   get ativo() { return this.#ativo; }
   
   // Alteração dos dados
-  alterar(tipoPessoa, nome, documento, email, telefone, endereco, ativo) {
+  alterar({ tipoPessoa, nome, documento, email, telefone, endereco, ativo }) {
     this.#tipoPessoa = tipoPessoa;
     this.#nome = nome;
     this.#documento = documento;
@@ -51,7 +51,7 @@ class Doador extends Entity  {
   }
   
   // Fábrica para criação
-  static criar(tipoPessoa, nome, documento, email, telefone, endereco) {
+  static criar({ tipoPessoa, nome, documento, email, telefone, endereco }) {
     return new Doador(null, tipoPessoa, nome, documento, email, telefone, endereco, true, new Date(), null);
   }
 }

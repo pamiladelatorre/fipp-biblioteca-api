@@ -19,7 +19,7 @@ class GeneroController {
     // Alterar gênero pelo ID
     alterar = asyncWrapper(async (req, res) => {
         const { id } = req.params;
-        const result = await GeneroService.alterar({ id, ...req.body });
+        const result = await GeneroService.alterar(id, req.body);
         return handleResult(result, res); // 200: Success
     });
 

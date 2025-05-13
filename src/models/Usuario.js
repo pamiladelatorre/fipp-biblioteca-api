@@ -32,7 +32,7 @@ class Usuario extends Entity {
     dataAlteracao
   ) {
     if (new.target !== Usuario) {
-        throw new Error(`Use ${new.target.name}.criar() ou ${new.target.name}.fromDbRow()`);
+        throw new Error(`Use ${this.constructor.name}.criar()`);
     }
     super(id, dataCriacao, dataAlteracao);        
     this.#cpf = cpf;
@@ -64,7 +64,7 @@ class Usuario extends Entity {
   get primeiroAcesso() { return this.#primeiroAcesso; }
 
   // Alteração dos dados
-  alterar(cpf, nome, dataNascimento, telefone, email, senha, cep, endereco, tipoUsuario) {
+  alterar({ cpf, nome, dataNascimento, telefone, email, senha, cep, endereco, tipoUsuario }) {
     this.#cpf = cpf;
     this.#nome = nome;
     this.#dataNascimento = dataNascimento;
@@ -90,7 +90,7 @@ class Usuario extends Entity {
   }
   
   // Fábrica para criação
-  static criar(cpf, nome, dataNascimento, telefone, email, senha, cep, endereco, tipoUsuario) {
+  static criar({ cpf, nome, dataNascimento, telefone, email, senha, cep, endereco, tipoUsuario }) {
     return new Usuario(null, cpf, nome, dataNascimento, telefone, email, senha, cep, endereco, tipoUsuario, false, true, true, new Date(), null);
   }
 }

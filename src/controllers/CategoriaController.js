@@ -19,7 +19,7 @@ class CategoriaController {
     // Alterar categoria pelo ID
     alterar = asyncWrapper(async (req, res) => {
         const { id } = req.params;
-        const result = await CategoriaService.alterar({ id, ...req.body });
+        const result = await CategoriaService.alterar(id, req.body);
         return handleResult(result, res); // 200: Success
     });
 

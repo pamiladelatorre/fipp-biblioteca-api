@@ -4,8 +4,8 @@ import { notFoundIfNull, notFoundIfEmpty, normalizeToBit } from '../utils/Servic
 import { Result } from '../utils/Result.js';
 
 class CategoriaService {
-    async adicionar({ descricao }){
-        const novaCategoria = Categoria.criar(descricao);
+    async adicionar(payload){
+        const novaCategoria = Categoria.criar({ ...payload });
         const categoria = await CategoriaDAO.inserir(novaCategoria);
         return Result.ok(categoria);
     }
@@ -15,12 +15,12 @@ class CategoriaService {
         return notFoundIfNull(categoria, 'Categoria', 'a');
     }
 
-    async alterar({ id, descricao, ativo }) {
+    async alterar(id, payload) {
         const categoria = await CategoriaDAO.buscarPorId(id);
         const validacao = notFoundIfNull(categoria, 'Categoria', 'a');
         if (validacao.isFailure) return validacao;
 
-        categoria.alterar(descricao, ativo);
+        categoria.alterar({ ...payload });
         await CategoriaDAO.atualizar(categoria);
         return Result.ok(categoria);
     }
