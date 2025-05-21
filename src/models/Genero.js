@@ -32,8 +32,8 @@ class Genero extends Entity {
   }
   
   // Fábrica para criação
-  static criar({ descricao }) {
-    return new Genero(null, descricao, true, new Date(), null);
+  static criar({ descricao, ativo }) {
+    return new Genero(null, descricao, ativo, new Date(), null);
   }
 }
   

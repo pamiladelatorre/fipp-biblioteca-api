@@ -31,8 +31,8 @@ class MotivoBaixa extends Entity {
   }
   
   // Fábrica para criação
-  static criar({ descricao }) {
-    return new MotivoBaixa(null, descricao, true, new Date(), null);
+  static criar({ descricao, ativo }) {
+    return new MotivoBaixa(null, descricao, ativo, new Date(), null);
   }
 }
   

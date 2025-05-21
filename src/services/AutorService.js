@@ -18,7 +18,7 @@ class AutorService {
     async alterar(id, payload){
         const autor = await AutorDAO.buscarPorId(id);
         const validacao = notFoundIfNull(autor, 'Autor');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         autor.alterar({ ...payload });
         await AutorDAO.atualizar(autor);
@@ -28,17 +28,17 @@ class AutorService {
     async alterarStatusAtivo(id, ativo){
         const autor = await AutorDAO.buscarPorId(id);
         const validacao = notFoundIfNull(autor, Autor);
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         autor.alterarAtivo(ativo);
         await AutorDAO.atualizar(autor);
         return Result.ok();
     }
 
-    async obterPorFiltro({ descricao, ativo }){
+    async obterPorFiltro({ nome, ativo }){
         const filtro = {
-            ...(descricao && { descricao: { valor: descricao, like: true } }),
-            ...(ativo !== undefined && { ativo: { valor: normalizeToBit(ativo) } })
+            ...(nome && { nome: { valor: nome, like: true } }),
+            ...(ativo !== undefined && ativo !== '' && { ativo: { valor: normalizeToBit(ativo) } })
         };
         const autores = await AutorDAO.buscarPorFiltro(filtro);
         return notFoundIfEmpty(autores, 'Autor');

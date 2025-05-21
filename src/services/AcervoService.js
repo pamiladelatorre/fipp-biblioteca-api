@@ -18,7 +18,7 @@ class AcervoService {
     async alterar(id, payload){
         const acervo = await AcervoDAO.buscarPorId(id);
         const validacao = notFoundIfNull(acervo, 'Acervo');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         acervo.alterar({ ...payload })
         await AcervoDAO.atualizar(acervo);
@@ -28,17 +28,17 @@ class AcervoService {
     async alterarStatusAtivo(id, ativo){
         const acervo = await AcervoDAO.buscarPorId(id);
         const validacao = notFoundIfNull(acervo, 'Acervo');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         acervo.alterarAtivo(ativo);
         await AcervoDAO.atualizar(ativo);
         return Result.ok();
     }
 
-    async obterPorFiltro({ descricao, ativo }){
+    async obterPorFiltro({ titulo, ativo }){
         const filtro = {
-            ...(descricao && { descricao: { valor: descricao, like: true } }),
-            ...(ativo !== undefined && { ativo: { valor: normalizeToBit(ativo) } })
+            ...(titulo && { titulo: { valor: titulo, like: true } }),
+            ...(ativo !== undefined && ativo !== '' && { ativo: { valor: normalizeToBit(ativo) } })
         };
         const acervos = await AcervoDAO.buscarPorFiltro(filtro);
         return notFoundIfEmpty(acervos, 'Categoria', 'a');

@@ -31,8 +31,8 @@ class Categoria extends Entity {
   }
   
   // Fábrica para criação
-  static criar({ descricao }) {
-    return new Categoria(null, descricao, true, new Date(), null);
+  static criar({ descricao, ativo }) {
+    return new Categoria(null, descricao, ativo, new Date(), null);
   }
 
   // toJSON() {

@@ -18,7 +18,7 @@ class CategoriaService {
     async alterar(id, payload) {
         const categoria = await CategoriaDAO.buscarPorId(id);
         const validacao = notFoundIfNull(categoria, 'Categoria', 'a');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         categoria.alterar({ ...payload });
         await CategoriaDAO.atualizar(categoria);
@@ -28,7 +28,7 @@ class CategoriaService {
     async alterarStatusAtivo(id, ativo) {
         const categoria = await CategoriaDAO.buscarPorId(id);
         const validacao = notFoundIfNull(categoria, 'Categoria', 'a');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         categoria.alterarAtivo(ativo);
         await CategoriaDAO.atualizar(categoria);
@@ -38,7 +38,7 @@ class CategoriaService {
     async obterPorFiltro({ descricao, ativo }){
         const filtro = {
             ...(descricao && { descricao: { valor: descricao, like: true } }),
-            ...(ativo !== undefined && { ativo: { valor: normalizeToBit(ativo) } })
+            ...(ativo !== undefined && ativo !== '' && { ativo: { valor: normalizeToBit(ativo) } })
         };
         const categorias = await CategoriaDAO.buscarPorFiltro(filtro);
         return notFoundIfEmpty(categorias, 'Categoria', 'a');

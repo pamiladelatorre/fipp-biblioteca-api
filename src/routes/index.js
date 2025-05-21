@@ -18,7 +18,7 @@ authRouter.use('/autores', autorRoutes);
 authRouter.use('/categorias', categoriaRoutes);
 authRouter.use('/fornecedores', fornecedorRoutes);
 authRouter.use('/generos', generoRoutes);
-authRouter.use('/motivos-baixas', motivoBaixaRoutes);
+authRouter.use('/motivos-baixa', motivoBaixaRoutes);
 authRouter.use('/usuarios', usuarioRoutes);
 
 export default (app) => {

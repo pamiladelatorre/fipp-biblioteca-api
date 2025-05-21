@@ -8,16 +8,19 @@
  */
 export function extractEntityDataForDb(entity, excluir = [], incluirHerdados = false) {
   const result = {};
-
-  let proto = Object.getPrototypeOf(entity);
   const visitados = new Set();
+  let proto = Object.getPrototypeOf(entity);
+
+  const camelToSnake = (str) =>
+    str.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
 
   while (proto && proto !== Object.prototype) {
     const descriptors = Object.getOwnPropertyDescriptors(proto);
 
     for (const [key, desc] of Object.entries(descriptors)) {
       if (typeof desc.get === 'function' && !excluir.includes(key) && !visitados.has(key)) {
-        result[key] = entity[key];
+        const snakeKey = camelToSnake(key);
+        result[snakeKey] = entity[key];
         visitados.add(key);
       }
     }
@@ -28,4 +31,3 @@ export function extractEntityDataForDb(entity, excluir = [], incluirHerdados = f
 
   return result;
 }
-  

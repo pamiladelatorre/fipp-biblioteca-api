@@ -19,7 +19,7 @@ class AuthService {
             return Result.fail(errorFactory('Unauthorized', 'E-mail ou senha inválidos.'));
 
         // Gerar token
-        const token = generateToken({ id: usuario.id, nome: usuario.nome, perfil: usuario.tipo_usuario, primeiroAcesso: usuario.primeiro_acesso});
+        const token = generateToken({ id: usuario.id, nome: usuario.nome, perfil: usuario.tipoUsuario, primeiroAcesso: usuario.primeiroAcesso});
 
         return Result.ok(token);
     }

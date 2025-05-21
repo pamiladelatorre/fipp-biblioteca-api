@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import CategoriaController from "../controllers/CategoriaController.js";
 import { validate } from '../middlewares/validate.js';
-import { categoriaCreateSchema, categoriaUpdateSchema, categoriaStatusSchema } from '../validations/categoriaValidation.js';
+import { categoriaCreateSchema, categoriaUpdateSchema, categoriaAtivoSchema } from '../validations/categoriaValidation.js';
 import { idParamSchema } from '../validations/commonValidation.js';
 
 const router = new Router();
@@ -26,7 +26,7 @@ router.put('/:id', validate('params', idParamSchema), validate('body', categoria
 router.patch(
     '/:id/ativo', 
     validate('params', idParamSchema), 
-    validate('body', categoriaStatusSchema), 
+    validate('body', categoriaAtivoSchema), 
     CategoriaController.alterarStatusAtivo
 ); 
 

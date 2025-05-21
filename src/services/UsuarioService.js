@@ -32,7 +32,7 @@ class UsuarioService {
     async alterar(payload){
         const usuario = await UsuarioDAO.buscarPorId(id);
         const validacao = notFoundIfNull(usuario, 'Usuario');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         usuario.alterar({ ...payload });
         await UsuarioDAO.atualizar(usuario);
@@ -42,7 +42,7 @@ class UsuarioService {
     async alterarStatusBloqueado(id, bloqueado){
         const usuario = await UsuarioDAO.buscarPorId(id);
         const validacao = notFoundIfNull(usuario, 'Usuario');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         usuario.alterarBloqueado(bloqueado);
         await UsuarioDAO.atualizar(usuario);
@@ -52,17 +52,17 @@ class UsuarioService {
     async alterarStatusAtivo(id, ativo){
         const usuario = await UsuarioDAO.buscarPorId(id);
         const validacao = notFoundIfNull(usuario, 'Usuario');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         usuario.alterarAtivo(ativo);
         await UsuarioDAO.atualizar(usuario);
         return Result.ok();
     }
 
-    async obterPorFiltro({ descricao, ativo }){
+    async obterPorFiltro({ nome, ativo }){
         const filtro = {
-            ...(descricao && { descricao: { valor: descricao, like: true } }),
-            ...(ativo !== undefined && { ativo: { valor: normalizeToBit(ativo) } })
+            ...(nome && { nome: { valor: nome, like: true } }),
+            ...(ativo !== undefined && ativo !== '' && { ativo: { valor: normalizeToBit(ativo) } })
         };
         const usuarios = await UsuarioDAO.buscarPorFiltro(filtro);
         return notFoundIfEmpty(usuarios, 'Usuario');

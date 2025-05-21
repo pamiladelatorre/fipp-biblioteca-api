@@ -18,9 +18,9 @@ class MotivoBaixaService {
     async alterar(id, payload){
         const motivoBaixa = await MotivoBaixaDAO.buscarPorId(id);
         const validacao = notFoundIfNull(motivoBaixa, 'Motivo baixa');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
-        motivoBaixa.atualizar({ ...payload });
+        motivoBaixa.alterar({ ...payload });
         await MotivoBaixaDAO.atualizar(motivoBaixa);
         return Result.ok();
     }
@@ -28,7 +28,7 @@ class MotivoBaixaService {
     async alterarStatusAtivo(id, ativo){
         const motivoBaixa = await MotivoBaixaDAO.buscarPorId(id);
         const validacao = notFoundIfNull(motivoBaixa, 'Motivo baixa');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         motivoBaixa.alterarAtivo(ativo);
         await MotivoBaixaDAO.atualizar(motivoBaixa);
@@ -38,9 +38,9 @@ class MotivoBaixaService {
     async obterPorFiltro({ descricao, ativo }){
         const filtro = {
             ...(descricao && { descricao: { valor: descricao, like: true } }),
-            ...(ativo !== undefined && { ativo: { valor: normalizeToBit(ativo) } })
+            ...(ativo !== undefined && ativo !== '' && { ativo: { valor: normalizeToBit(ativo) } })
         };
-        const motivosBaixas = await CategoriaDAO.buscarPorFiltro(filtro);
+        const motivosBaixas = await MotivoBaixaDAO.buscarPorFiltro(filtro);
         return notFoundIfEmpty(motivosBaixas, 'Motivo baixa');
     }
 }

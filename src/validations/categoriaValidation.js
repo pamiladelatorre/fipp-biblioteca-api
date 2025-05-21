@@ -14,17 +14,21 @@ const descricao = Joi.string()
     'any.required': 'O campo descrição é obrigatório.'
   });
 
+const ativo = Joi.boolean().required().messages({
+  'boolean.base': 'O campo "ativo" deve ser verdadeiro ou falso.',
+  'any.required': 'O campo "ativo" é obrigatório.'
+});
+
 export const categoriaCreateSchema = Joi.object({
-  descricao
+  descricao,
+  ativo
 });
 
 export const categoriaUpdateSchema = Joi.object({
-  descricao
+  descricao,
+  ativo
 });
 
-export const categoriaStatusSchema = Joi.object({
-  ativo: Joi.boolean().required().messages({
-    'boolean.base': 'O campo "ativo" deve ser verdadeiro ou falso.',
-    'any.required': 'O campo "ativo" é obrigatório.'
-  })
+export const categoriaAtivoSchema = Joi.object({
+  ativo
 });

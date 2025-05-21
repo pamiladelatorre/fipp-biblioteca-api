@@ -48,7 +48,7 @@ export default class BaseDAO {
             throw new Error("Instância de entidade inválida.");
         }
 
-        const dados = extractEntityDataForDb(model, ['id']);
+        const dados = extractEntityDataForDb(model, ['id'], true);
 
         const campos = Object.keys(dados);
         const valores = Object.values(dados);
@@ -69,8 +69,8 @@ export default class BaseDAO {
             throw new Error("Instância de entidade inválida.");
         }
 
-        const dados = extractEntityDataForDb(model, ['dataCriacao']);
-
+        const dados = extractEntityDataForDb(model, ['dataCriacao'], true);
+        
         const { id, ...resto } = dados;
         if (!id) throw new Error("Modelo precisa de ID para atualizar.");
 

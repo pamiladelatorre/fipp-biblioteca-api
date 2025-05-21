@@ -18,7 +18,7 @@ class GeneroService {
     async alterar(id, payload){
         const genero = await GeneroDAO.buscarPorId(id);
         const validacao = notFoundIfNull(genero, 'Genero');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         genero.alterar({ ...payload });
         await GeneroDAO.atualizar(genero);
@@ -28,7 +28,7 @@ class GeneroService {
     async alterarStatusAtivo(id, ativo){
         const genero = await GeneroDAO.buscarPorId(id);
         const validacao = notFoundIfNull(genero, 'Genero');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         genero.alterarAtivo(ativo);
         await GeneroDAO.atualizar(genero);
@@ -38,9 +38,9 @@ class GeneroService {
     async obterPorFiltro({ descricao, ativo }) {
         const filtro = {
             ...(descricao && { descricao: { valor: descricao, like: true } }),
-            ...(ativo !== undefined && { ativo: { valor: normalizeToBit(ativo) } })
+            ...(ativo !== undefined && ativo !== '' && { ativo: { valor: normalizeToBit(ativo) } })
         };
-        const generos = await CategoriaDAO.buscarPorFiltro(filtro);
+        const generos = await GeneroDAO.buscarPorFiltro(filtro);
         return notFoundIfEmpty(generos, 'Genero');
     }
 }

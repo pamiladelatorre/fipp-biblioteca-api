@@ -18,7 +18,7 @@ class FornecedorService {
     async alterar(id, payload){
         const fornecedor = await FornecedorDAO.buscarPorId(id);
         const validacao = notFoundIfNull(categoria, 'Fornecedor');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         fornecedor.alterar({ ...payload });
         await FornecedorDAO.atualizar(fornecedor)
@@ -28,17 +28,17 @@ class FornecedorService {
     async alterarStatusAtivo(id, ativo){
         const fornecedor = await FornecedorDAO.buscarPorId(id);
         const validacao = notFoundIfNull(categoria, 'Fornecedor');
-        if (validacao.isFailure) return validacao;
+        if (validacao.isFailure()) return validacao;
 
         fornecedor.alterarAtivo(ativo);
         await FornecedorDAO.atualizarAtivo(fornecedor);
         return Result.ok();
     }
 
-    async obterPorFiltro({ descricao, ativo }){
+    async obterPorFiltro({ razaoSocial, ativo }){
         const filtro = {
-            ...(descricao && { descricao: { valor: descricao, like: true } }),
-            ...(ativo !== undefined && { ativo: { valor: normalizeToBit(ativo) } })
+            ...(razaoSocial && { razaoSocial: { valor: razaoSocial, like: true } }),
+            ...(ativo !== undefined && ativo !== '' && { ativo: { valor: normalizeToBit(ativo) } })
         };
         const fornecedores = await FornecedorDAO.buscarPorFiltro(filtro);
         return notFoundIfEmpty(fornecedores, 'Fornecedor');

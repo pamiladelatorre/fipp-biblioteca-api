@@ -33,7 +33,7 @@ class GeneroController {
     
     // Buscar os gêneros por filtro
     obterPorFiltro = asyncWrapper(async (req, res) => {
-        const result = await GeneroService.obterPorFiltro(req.quer);
+        const result = await GeneroService.obterPorFiltro(req.query);
         return handleResult(result, res); // 200: Success
     });
 
