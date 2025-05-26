@@ -40,11 +40,11 @@ class FornecedorService {
 
         // IDs recebidos (que vieram no payload)
         const idsRecebidos = new Set(
-            metodosPagamento.map(m => m.id).filter(id => id !== null)
+            metodosPagamento.filter(m => m.id !== null && m.id !== undefined).map(m => m.id)
         );        
 
         const validaRemocao = await this.#validarRemocaoDeMetodosComCompra(id, idsRecebidos);
-        if (validaRemocao.isFailure()) return validacao;
+        if (validaRemocao.isFailure()) return validaRemocao;
 
         fornecedor.alterar({ ...payload });
 
@@ -92,6 +92,18 @@ class FornecedorService {
         // Busca do banco os métodos com compra associada
         const metodosPagamentoComCompra = await FornecedorDAO.buscarMetodosPagamentoComCompra(fornecedorId) || [];
 
+        if (metodosPagamentoComCompra.length === 0) {
+            return Result.ok(); // Nenhum método com compra, pode seguir
+        }
+
+        // Caso especial: nenhum ID foi enviado, mas havia métodos com compra → erro
+        if (idsRecebidos.size === 0) {
+            return Result.fail(
+                errorFactory('ValidationError', 'Não é possível remover meios de pagamento que já foram utilizados em compras.')
+            );
+        }
+        
+
         // IDs dos métodos que têm compras
         const idsComCompra = metodosPagamentoComCompra.map(m => m.id);
 
@@ -105,7 +117,7 @@ class FornecedorService {
         }
 
         return Result.ok();
-  }
+    }
 }
 
 export default new FornecedorService();
