@@ -64,13 +64,11 @@ CREATE TABLE fornecedores (
 CREATE TABLE metodos_pagamentos (
   id BIGINT AUTO_INCREMENT,
   fornecedor_id BIGINT NOT NULL,
-  tipo_pagamento ENUM('avista', 'parcelado', 'boletado', 'cartao', 'pix') NOT NULL,
+  tipo_pagamento ENUM('boleto', 'cartao', 'pix') NOT NULL,
   prazo INT,
-  tipo_desconto ENUM('volume', 'antecipacao'),
+  parcela_maxima INT,
   chave_pix VARCHAR(255),
-  banco VARCHAR(255),
-  agencia VARCHAR(255),
-  conta VARCHAR(255),
+  tipo_desconto ENUM('volume', 'antecipacao'),
   data_criacao TIMESTAMP NOT NULL,
   data_alteracao TIMESTAMP NULL,
   CONSTRAINT pk_metodos_pagamentos PRIMARY KEY (id)

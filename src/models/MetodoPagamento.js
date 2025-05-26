@@ -1,29 +1,16 @@
 import Entity from "./Entity.js";
+import { toNull } from "../utils/stringUtils.js";
+
 
 class MetodoPagamento extends Entity {
-  static TipoPagamento = {
-    AVISTA: "avista",
-    PARCELADO: "parcelado",
-    BOLETADO: "boletado",
-    CARTAO: "cartao",
-    PIX: "pix"
-  };
-
-  static TipoDesconto = {
-    VOLUME: "volume",
-    ANTECIPACAO: "antecipacao"
-  }
-
   #fornecedorId;
   #tipoPagamento;
   #prazo;
-  #tipoDesconto;
+  #parcelaMaxima;
   #chavePix;
-  #banco;
-  #agencia;
-  #conta;
+  #tipoDesconto;
   
-  constructor(id, fornecedorId, tipoPagamento, prazo, tipoDesconto, chavePix, banco, agencia, conta, dataCriacao, dataAlteracao) {
+  constructor(id, fornecedorId, tipoPagamento, prazo, parcelaMaxima, chavePix, tipoDesconto, dataCriacao, dataAlteracao) {
     if (new.target !== MetodoPagamento) {
       throw new Error(`Use ${this.constructor.name}.criar()`);
     }
@@ -31,39 +18,41 @@ class MetodoPagamento extends Entity {
     this.#fornecedorId = fornecedorId;
     this.#tipoPagamento = tipoPagamento;
     this.#prazo = prazo;
-    this.#tipoDesconto = tipoDesconto;
+    this.#parcelaMaxima = parcelaMaxima;
     this.#chavePix = chavePix;
-    this.#banco = banco;
-    this.#agencia = agencia;
-    this.#conta = conta;
+    this.#tipoDesconto = tipoDesconto;
   }
   
   // Getters
   get fornecedorId() { return this.#fornecedorId; }
   get tipoPagamento() { return this.#tipoPagamento; }
   get prazo() { return this.#prazo; }
-  get tipoDesconto() { return this.#tipoDesconto; }
+  get parcelaMaxima() { return this.#parcelaMaxima; }
   get chavePix() { return this.#chavePix; }
-  get banco() { return this.#banco; }
-  get agencia() { return this.#agencia; }
-  get conta() { return this.#conta; }
+  get tipoDesconto() { return this.#tipoDesconto; }
   
   // Alteração dos dados
-  alterar({ fornecedorId, tipoPagamento, prazo, tipoDesconto, chavePix, banco, agencia, conta }) {
-    this.#fornecedorId = fornecedorId;
-    this.#tipoPagamento = tipoPagamento;
-    this.#prazo = prazo;
-    this.#tipoDesconto = tipoDesconto;
-    this.#chavePix = chavePix;
-    this.#banco = banco;
-    this.#agencia = agencia;
-    this.#conta = conta;
+  alterar({ prazo, parcelaMaxima, chavePix, tipoDesconto }) {
+    this.#prazo = toNull(prazo);
+    this.#parcelaMaxima = toNull(parcelaMaxima);
+    this.#chavePix = toNull(chavePix);
+    this.#tipoDesconto = toNull(tipoDesconto);
     this.dataAlteracao = new Date();
   }
 
   // Fábrica para criação
-  static criar({ fornecedorId, tipoPagamento, prazo, tipoDesconto, chavePix, banco, agencia, conta }) {
-    return new MetodoPagamento(null, fornecedorId, tipoPagamento, prazo, tipoDesconto, chavePix, banco, agencia, conta, true, new Date(), null);
+  static criar({ fornecedorId, tipoPagamento, prazo, parcelaMaxima, chavePix, tipoDesconto }) {
+    return new MetodoPagamento(
+      null, 
+      fornecedorId, 
+      tipoPagamento,
+      toNull(prazo), 
+      toNull(parcelaMaxima), 
+      toNull(chavePix), 
+      toNull(tipoDesconto), 
+      new Date(), 
+      null
+    );
   }
 }
   

@@ -1,5 +1,6 @@
 import Entity from "./Entity.js";
 import MetodoPagamento from "./MetodoPagamento.js";
+import { ValidationError } from '../utils/errors.js';
 
 class Fornecedor extends Entity {
   #cnpj;
@@ -7,15 +8,15 @@ class Fornecedor extends Entity {
   #telefone;
   #email;
   #endereco;
-  #incricaoEstadual;
+  #inscricaoEstadual;
   #representante;
   #ativo;
 
   // Relacionamentos
-  #metodosPagamento = [];
-  #generos = [];
+  #metodosPagamento;
+  #generos;
   
-  constructor(id, cnpj, razaoSocial, telefone, email, endereco, incricaoEstadual, representante, ativo, dataCriacao, dataAlteracao) {
+  constructor(id, cnpj, razaoSocial, telefone, email, endereco, inscricaoEstadual, representante, ativo, dataCriacao, dataAlteracao) {
     if (new.target !== Fornecedor) {
       throw new Error(`Use ${this.constructor.name}.criar()`);
     }
@@ -25,9 +26,11 @@ class Fornecedor extends Entity {
     this.#telefone = telefone;
     this.#email = email;
     this.#endereco = endereco;
-    this.#incricaoEstadual = incricaoEstadual;
+    this.#inscricaoEstadual = inscricaoEstadual;
     this.#representante = representante;
     this.#ativo = ativo;
+    this.#metodosPagamento = [];
+    this.#generos = [];
   }
   
   // Getters
@@ -36,7 +39,7 @@ class Fornecedor extends Entity {
   get telefone() { return this.#telefone; }
   get email() { return this.#email; }
   get endereco() { return this.#endereco; }
-  get incricaoEstadual() { return this.#incricaoEstadual; }
+  get inscricaoEstadual() { return this.#inscricaoEstadual; }
   get representante() { return this.#representante; }
   get ativo() { return this.#ativo; }
 
@@ -45,13 +48,13 @@ class Fornecedor extends Entity {
   get generos() { return this.#generos; }
   
   // Alteração dos dados
-  alterar({ cnpj, razaoSocial, telefone, email, endereco, incricaoEstadual, representante, ativo }) {
+  alterar({ cnpj, razaoSocial, telefone, email, endereco, inscricaoEstadual, representante, ativo }) {
     this.#cnpj = cnpj;
     this.#razaoSocial = razaoSocial;
     this.#telefone = telefone;
     this.#email = email;
     this.#endereco = endereco;
-    this.#incricaoEstadual = incricaoEstadual;
+    this.#inscricaoEstadual = inscricaoEstadual;
     this.#representante = representante;
     this.#ativo = ativo;
     this.dataAlteracao = new Date();
@@ -63,37 +66,46 @@ class Fornecedor extends Entity {
     this.dataAlteracao = new Date();
   }
 
-  adicionarMetodoPagamento(metodoPagamento) {
-    if (!(metodoPagamento instanceof MetodoPagamento)) {
-      throw new Error('MetodoPagamento inválido.');
+  adicionarMetodoPagamento({ tipoPagamento, prazo, parcelaMaxima, chavePix, tipoDesconto }) {
+    const existente = this.#metodosPagamento.find(m => m.tipoPagamento === tipoPagamento);
+    if (existente) {
+      throw new ValidationError(`Método de pagamento do tipo '${tipoPagamento}' já existe para este fornecedor.`);
     }
+
+    const metodoPagamento = MetodoPagamento.criar({ fornecedorId:this.id, tipoPagamento, prazo, parcelaMaxima, chavePix, tipoDesconto });
     this.#metodosPagamento.push(metodoPagamento);
-    this.dataAlteracao = new Date();
   }
 
-  definirMetodosPagamento(metodosPagamento) {
-    if (!Array.isArray(metodosPagamento)) {
-      throw new TypeError('metodosPagamento deve ser um array');
+  alterarMetodoPagamento({ id, prazo, parcelaMaxima, chavePix, tipoDesconto }) {
+    const metodo = this.#metodosPagamento.find(m => m.id === id);
+    if (!metodo) {
+      throw new ValidationError(`Método de pagamento com ID ${id} não encontrado.`);
+    }
+
+    metodo.alterar({ prazo, parcelaMaxima, chavePix, tipoDesconto });
+  }
+
+  removerMetodoPagamento(id) {
+    const index = this.#metodosPagamento.findIndex(m => m.id === id);
+    if (index === -1) {
+      throw new Error(`Método de pagamento com ID ${id} não encontrado.`);
     }
   
-    if (!metodosPagamento.every(m => m instanceof MetodoPagamento)) {
-      throw new TypeError('metodosPagamento deve ser um array de instâncias de MetodoPagamento');
-    }
-
-    this.#metodosPagamento = metodosPagamento;
+    this.#metodosPagamento.splice(index, 1);
   }
 
-  definirGeneros(generos) {
-    if (!Array.isArray(generos)) {
+  definirGeneros(generosIds) {
+    if (!Array.isArray(generosIds)) {
       throw new TypeError('generos deve ser um array');
     }
-    this.#generos = generos;
+    this.#generos = generosIds;
   }
   
   // Fábrica para criação
-  static criar({ cnpj, razaoSocial, telefone, email, endereco, incricaoEstadual, representante }) {
-    return new Fornecedor(null, cnpj, razaoSocial, telefone, email, endereco, incricaoEstadual, representante, true, new Date(), null);
+  static criar({ cnpj, razaoSocial, telefone, email, endereco, inscricaoEstadual, representante, ativo }) {
+    return new Fornecedor(null, cnpj, razaoSocial, telefone, email, endereco, inscricaoEstadual, representante, ativo, new Date(), null);
   }
+
 }
-  
+
 export default Fornecedor;

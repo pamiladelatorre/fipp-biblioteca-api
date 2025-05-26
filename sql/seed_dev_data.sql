@@ -35,12 +35,12 @@ VALUES
 ('23742503000138', 'Fornecedora ABC LTDA', '1145678901', 'fornecedor@abc.com', 'Rua X, 789', '123456789', 'Bruno Silva', true, CURRENT_TIMESTAMP, NULL);
 
 --Tabela metodos_pagamentos
-INSERT INTO metodos_pagamentos (fornecedor_id, tipo_pagamento, prazo, tipo_desconto, chave_pix, banco, agencia, conta, data_criacao, data_alteracao) 
+INSERT INTO metodos_pagamentos (fornecedor_id, tipo_pagamento, prazo, parcela_maxima, chave_pix, tipo_desconto, data_criacao, data_alteracao) 
 VALUES 
-(1, 'pix', 0, 'antecipacao', 'editora.alfa@pix.com', 'Banco do Brasil', '1234-5', '987654-3', CURRENT_TIMESTAMP, NULL),
-(2, 'boletado', 30, 'volume', NULL, 'Bradesco', '0001-9', '123456-0', CURRENT_TIMESTAMP, NULL),
-(3, 'cartao', 10, NULL, NULL, 'Itaú', '3456-7', '456789-1', CURRENT_TIMESTAMP, NULL),
-(4, 'avista', 0, 'volume', 'chavepix123', 'Banco XYZ', '1234', '5678', CURRENT_TIMESTAMP, NULL);
+(1, 'pix', NULL, NULL, 'editora.alfa@pix.com', 'antecipacao', CURRENT_TIMESTAMP, NULL),
+(2, 'boleto', 30, NULL, NULL, 'volume', CURRENT_TIMESTAMP, NULL),
+(3, 'cartao', NULL, 6, NULL, NULL, CURRENT_TIMESTAMP, NULL),
+(4, 'boleto', 60, NULL, NULL, NULL, CURRENT_TIMESTAMP, NULL);
 
 --Tabela fornecedores_generos
 INSERT INTO fornecedores_generos (fornecedor_id, genero_id) 

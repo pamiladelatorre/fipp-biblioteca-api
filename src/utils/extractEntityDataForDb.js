@@ -1,3 +1,5 @@
+import { camelToSnake } from "./stringUtils.js";
+
 /**
  * Extrai os dados públicos de uma entidade usando apenas os getters da classe atual.
  * Ideal para salvar no banco de dados.
@@ -11,8 +13,8 @@ export function extractEntityDataForDb(entity, excluir = [], incluirHerdados = f
   const visitados = new Set();
   let proto = Object.getPrototypeOf(entity);
 
-  const camelToSnake = (str) =>
-    str.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
+  // const camelToSnake = (str) =>
+  //   str.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
 
   while (proto && proto !== Object.prototype) {
     const descriptors = Object.getOwnPropertyDescriptors(proto);

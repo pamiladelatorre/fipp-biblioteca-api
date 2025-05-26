@@ -1,6 +1,7 @@
 import { query, execute } from '../infra/database.js';
 import Entity from '../models/Entity.js';
 import { extractEntityDataForDb } from "../utils/extractEntityDataForDb.js";
+import { camelToSnake } from '../utils/stringUtils.js';
 
 export default class BaseDAO {
     constructor(tabela) {
@@ -25,7 +26,8 @@ export default class BaseDAO {
     
         const condicoes = [];
     
-        for (const [campo, config] of Object.entries(filtro)) {
+        for (const [campoCamel, config] of Object.entries(filtro)) {
+            const campo = camelToSnake(campoCamel);
             const { valor, like = false } = 
                 (typeof config === 'object' && config !== null)
                 ? config
@@ -43,12 +45,12 @@ export default class BaseDAO {
         return rows.map(row => this.mapRowToEntity(row));
     }
   
-    async inserir(model, conn = null) {
+    async inserir(model, conn = null, excluirCampos = ['id']) {
         if (!(model instanceof Entity)) {
             throw new Error("Instância de entidade inválida.");
         }
 
-        const dados = extractEntityDataForDb(model, ['id'], true);
+        const dados = extractEntityDataForDb(model, excluirCampos, true);
 
         const campos = Object.keys(dados);
         const valores = Object.values(dados);
@@ -64,12 +66,12 @@ export default class BaseDAO {
         return model;
     }
 
-    async atualizar(model, conn = null) {
+    async atualizar(model, conn = null, excluirCampos = ['dataCriacao']) {
         if (!(model instanceof Entity)) {
             throw new Error("Instância de entidade inválida.");
         }
 
-        const dados = extractEntityDataForDb(model, ['dataCriacao'], true);
+        const dados = extractEntityDataForDb(model, excluirCampos, true);
         
         const { id, ...resto } = dados;
         if (!id) throw new Error("Modelo precisa de ID para atualizar.");
