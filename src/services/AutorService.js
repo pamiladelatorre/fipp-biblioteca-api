@@ -35,9 +35,10 @@ class AutorService {
         return Result.ok();
     }
 
-    async obterPorFiltro({ nome, ativo }){
+    async obterPorFiltro({ nome, nacionalidade, ativo }){
         const filtro = {
             ...(nome && { nome: { valor: nome, like: true } }),
+            ...(nacionalidade && { nacionalidade: { valor: nacionalidade, like: true } }),
             ...(ativo !== undefined && ativo !== '' && { ativo: { valor: normalizeToBit(ativo) } })
         };
         const autores = await AutorDAO.buscarPorFiltro(filtro);

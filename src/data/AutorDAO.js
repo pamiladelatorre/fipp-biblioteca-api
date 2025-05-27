@@ -11,7 +11,7 @@ class AutorDAO extends BaseDAO {
     }    
 
     mapRowToEntity(row) {
-        return new Autor(row.id, row.nome, row.nacionalidade, row.dataNascimento, row.biografia, row.ativo, row.data_criacao, row.data_alteracao);
+        return new Autor(row.id, row.nome, row.nacionalidade, row.data_nascimento, row.biografia, row.ativo, row.data_criacao, row.data_alteracao);
     }     
 }
 

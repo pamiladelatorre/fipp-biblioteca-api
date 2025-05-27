@@ -39,7 +39,7 @@ class FornecedorController {
 
     // Buscar os fornecedores ativoss
     obterAtivas = asyncWrapper(async (req, res) => {
-        const result = await FornecedorService.obterAtivas({ ativo: true });
+        const result = await FornecedorService.obterPorFiltro({ ativo: true });
         return handleResult(result, res); // 200: Success
     });
 }

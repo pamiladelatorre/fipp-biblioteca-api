@@ -43,8 +43,8 @@ class Autor extends Entity  {
   }
   
   // Fábrica para criação
-  static criar({ nome, nacionalidade, dataNascimento, biografia }) {
-    return new Autor(null, nome, nacionalidade, dataNascimento, biografia, true, new Date(), null);
+  static criar({ nome, nacionalidade, dataNascimento, biografia, ativo }) {
+    return new Autor(null, nome, nacionalidade, dataNascimento, biografia, ativo, new Date(), null);
   }
 }
   
