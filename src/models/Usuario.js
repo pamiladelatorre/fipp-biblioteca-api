@@ -65,7 +65,7 @@ class Usuario extends Entity {
   get primeiroAcesso() { return this.#primeiroAcesso; }
 
   // Alteração dos dados
-  alterar({ cpf, nome, dataNascimento, telefone, email, cep, endereco, tipoUsuario }) {
+  alterar({ cpf, nome, dataNascimento, telefone, email, cep, endereco, tipoUsuario, bloqueado, ativo }) {
     this.#cpf = cpf;
     this.#nome = nome;
     this.#dataNascimento = dataNascimento.split('T')[0];
@@ -74,6 +74,8 @@ class Usuario extends Entity {
     this.#cep = cep;
     this.#endereco = endereco;
     this.#tipoUsuario = tipoUsuario;
+    this.#bloqueado = bloqueado;
+    this.#ativo = ativo;
     this.dataAlteracao = new Date();
   }
 
@@ -90,8 +92,8 @@ class Usuario extends Entity {
   }
   
   // Fábrica para criação
-  static criar({ cpf, nome, dataNascimento, telefone, email, senha, cep, endereco, tipoUsuario }) {
-    return new Usuario(null, cpf, nome, dataNascimento.split('T')[0], telefone, email, senha, cep, endereco, tipoUsuario, false, true, true, new Date(), null);
+  static criar({ cpf, nome, dataNascimento, telefone, email, senha, cep, endereco, tipoUsuario, bloqueado, ativo }) {
+    return new Usuario(null, cpf, nome, dataNascimento.split('T')[0], telefone, email, senha, cep, endereco, tipoUsuario, bloqueado, ativo, true, new Date(), null);
   }
 
   toJSON() {
