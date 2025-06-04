@@ -39,7 +39,7 @@ class AcervoController {
     
     // Buscar os acervos ativas
     obterAtivas = asyncWrapper(async (req, res) => {
-        const result = await AcervoService.obterAtivas({ ativo: true });
+        const result = await AcervoService.obterPorFiltro({ ativo: true });
         return handleResult(result, res); // 200: Success
     });
 }

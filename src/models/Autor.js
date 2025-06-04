@@ -30,7 +30,7 @@ class Autor extends Entity  {
   alterar({ nome, nacionalidade, dataNascimento, biografia, ativo }) {
     this.#nome = nome;
     this.#nacionalidade = nacionalidade;
-    this.#dataNascimento = dataNascimento;
+    this.#dataNascimento = dataNascimento.split('T')[0];
     this.#biografia = biografia;
     this.#ativo = ativo;
     this.dataAlteracao = new Date();
@@ -44,7 +44,7 @@ class Autor extends Entity  {
   
   // Fábrica para criação
   static criar({ nome, nacionalidade, dataNascimento, biografia, ativo }) {
-    return new Autor(null, nome, nacionalidade, dataNascimento, biografia, ativo, new Date(), null);
+    return new Autor(null, nome, nacionalidade, dataNascimento.split('T')[0], biografia, ativo, new Date(), null);
   }
 }
   

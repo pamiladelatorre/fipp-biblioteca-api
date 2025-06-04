@@ -38,7 +38,7 @@ class AutorController {
     });
 
     // Buscar os autores ativas
-    obterAtivas = asyncWrapper(async (req, res) => {
+    obterAtivos = asyncWrapper(async (req, res) => {
         const result = await AutorService.obterPorFiltro({ ativo: true });
         return handleResult(result, res); // 200: Success
     });

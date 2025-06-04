@@ -52,6 +52,16 @@ class AcervoDAO extends BaseDAO {
         const [row] = await query(sql, [id]);
         return row ? this.mapRowToEntity(row) : null;
     }
+
+    async inserir(model, conn = null) {
+        const acervo = super.inserir(model, conn, ['id', 'autor', 'genero', 'categoria']);
+        return acervo;
+    }
+
+    async atualizar(model, conn = null) {
+        const acervo = super.atualizar(model, conn, ['dataCriacao', 'autor', 'genero', 'categoria']);
+        return acervo;
+    }
 }
 
 // Exporta instância padrão

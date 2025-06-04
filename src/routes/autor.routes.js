@@ -13,7 +13,7 @@ router.post('', AutorController.adicionar);
 router.get('', AutorController.obterPorFiltro);
 
 // Lista autores ativos (rota fixa deve vir antes de parâmetros dinâmicos)
-router.get('/ativos', AutorController.obterAtivas);
+router.get('/ativos', AutorController.obterAtivos);
 
 // Consulta por ID
 router.get('/:id', validate('params', idParamSchema), AutorController.obterPorId);

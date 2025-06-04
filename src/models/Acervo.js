@@ -55,9 +55,9 @@ class Acervo extends Entity {
   }
   
   // Getters
-  get autor() { return this.#autorId; }
-  get genero() { return this.#generoId; }
-  get categoria() { return this.#categoriaId; }
+  get autorId() { return this.#autorId; }
+  get generoId() { return this.#generoId; }
+  get categoriaId() { return this.#categoriaId; }
   get titulo() { return this.#titulo; }
   get numeroEdicao() { return this.#numeroEdicao; }
   get editora() { return this.#editora; }
@@ -72,16 +72,17 @@ class Acervo extends Entity {
   get categoria() { return this.#categoria; }
   
   // Alteração dos dados
-  alterar({ autorId, generoId, categoriaId, titulo, numeroEdicao, editora, dataPublicacao, numeroPagina, isbn }) {
+  alterar({ autorId, generoId, categoriaId, titulo, numeroEdicao, editora, dataPublicacao, numeroPagina, isbn, ativo }) {
     this.#autorId = autorId;
     this.#generoId = generoId;
     this.#categoriaId = categoriaId;
     this.#titulo = titulo;
     this.#numeroEdicao = numeroEdicao;
     this.#editora = editora;
-    this.#dataPublicacao = dataPublicacao;
+    this.#dataPublicacao = dataPublicacao.split('T')[0];
     this.#numeroPagina = numeroPagina;
     this.#isbn = isbn;
+    this.#ativo = ativo;
     this.dataAlteracao = new Date();
     this.#autor = null;
     this.#genero = null;
@@ -95,7 +96,7 @@ class Acervo extends Entity {
   }
   
   // Fábrica para criação
-  static criar({ autorId, generoId, categoriaId, titulo, numeroEdicao, editora, dataPublicacao, numeroPagina, isbn }) {
+  static criar({ autorId, generoId, categoriaId, titulo, numeroEdicao, editora, dataPublicacao, numeroPagina, isbn, ativo }) {
     return new Acervo(
       null,
       autorId,
@@ -104,10 +105,10 @@ class Acervo extends Entity {
       titulo,
       numeroEdicao,
       editora,
-      dataPublicacao,
+      dataPublicacao.split('T')[0],
       numeroPagina,
       isbn,
-      true,
+      ativo,
       new Date(),
       null);
   }

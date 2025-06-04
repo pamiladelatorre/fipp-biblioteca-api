@@ -12,7 +12,7 @@ class CategoriaDAO extends BaseDAO {
 
     mapRowToEntity(row) {
         return new Categoria(row.id, row.descricao, row.ativo, row.data_criacao, row.data_alteracao);
-    }    
+    }
 }
 
 // Exporta instância padrão

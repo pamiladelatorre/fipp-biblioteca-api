@@ -35,13 +35,15 @@ class AcervoService {
         return Result.ok();
     }
 
-    async obterPorFiltro({ titulo, ativo }){
+    async obterPorFiltro({ titulo, editora, isbn, ativo }){
         const filtro = {
             ...(titulo && { titulo: { valor: titulo, like: true } }),
+            ...(editora && { editora: { valor: editora, like: true } }),
+            ...(isbn && { isbn: { valor: isbn, like: true } }),
             ...(ativo !== undefined && ativo !== '' && { ativo: { valor: normalizeToBit(ativo) } })
         };
         const acervos = await AcervoDAO.buscarPorFiltro(filtro);
-        return notFoundIfEmpty(acervos, 'Categoria', 'a');
+        return notFoundIfEmpty(acervos, 'Acervo');
     }
 }
 

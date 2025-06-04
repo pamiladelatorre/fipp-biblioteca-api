@@ -37,11 +37,10 @@ class Categoria extends Entity {
 
   // toJSON() {
   //   return {
-  //     ...super.toJSON(),
-  //     itens: this.#itens.map(i => i.toJSON())
+  //     // ...super.toJSON(),
+  //     // itens: this.#itens.map(i => i.toJSON())
   //   };
   // }
 }
   
 export default Categoria;
-
