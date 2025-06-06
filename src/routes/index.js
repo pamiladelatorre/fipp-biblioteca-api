@@ -9,6 +9,8 @@ import fornecedorRoutes from './fornecedor.routes.js'
 import generoRoutes from './genero.routes.js';
 import motivoBaixaRoutes from './motivoBaixa.routes.js'
 import usuarioRoutes from './usuario.routes.js'
+import doadorRoutes from './doador.routes.js'
+
 
 const authRouter = Router();
 authRouter.use(auth);  // Aplica o middleware auth a todas as rotas subsequentes
@@ -20,6 +22,8 @@ authRouter.use('/fornecedores', fornecedorRoutes);
 authRouter.use('/generos', generoRoutes);
 authRouter.use('/motivos-baixa', motivoBaixaRoutes);
 authRouter.use('/usuarios', usuarioRoutes);
+authRouter.use('/doadores', doadorRoutes);
+
 
 export default (app) => {
     app.use('/auth', authRoutes); // Rota pública
