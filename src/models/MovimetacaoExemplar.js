@@ -12,7 +12,27 @@ class MovimetacaoExemplar extends Entity {
     #dataFim;
     #numeroRenovacao
 
-    constructor(id, exemplarId, usuarioId, etapa, status, grupoId, referenciaId, dataInicio, dataPrevista, dataFim, numeroRenovacao) {
+    // Relacionamentos
+    #exemplar;
+    #usuario;
+
+    constructor(
+        id, 
+        exemplarId, 
+        usuarioId, 
+        etapa, 
+        status, 
+        grupoId, 
+        referenciaId, 
+        dataInicio, 
+        dataPrevista, 
+        dataFim, 
+        numeroRenovacao, 
+        dataCriacao,
+        dataAlteracao,
+        exemplar = null, 
+        usuario = null
+    ) {
         if (new.target !== MovimetacaoExemplar) {
             throw new Error(`Use ${this.constructor.name}.criar()`);
         }
@@ -27,6 +47,8 @@ class MovimetacaoExemplar extends Entity {
         this.#dataPrevista = dataPrevista;
         this.#dataFim = dataFim;
         this.#numeroRenovacao = numeroRenovacao;
+        this.#exemplar = exemplar;
+        this.#usuario = usuario;
     }
 
     // Getters
@@ -40,6 +62,10 @@ class MovimetacaoExemplar extends Entity {
     get dataPrevista() { return this.#dataPrevista; }
     get dataFim() { return this.#dataFim; }
     get numeroRenovacao() { return this.#numeroRenovacao; }
+
+    // Relacionamentos
+    get exemplar() { return this.#exemplar; }
+    get usuario() { return this.#usuario; }
 
     // Fábrica para criação
     static criar({ exemplarId, usuarioId, etapa }) {

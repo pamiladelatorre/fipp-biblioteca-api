@@ -1,22 +1,26 @@
 import Entity from "./Entity.js";
 
-class Exemplar  extends Entity{
-  #acervoId;
+class Exemplar extends Entity{
   #entradaAcervoId;
+  #acervoId;
   #tombo;
   #status;
   #estado;
+
+  // Relacionamentos
+  #acervo;
   
-  constructor(id, acervoId, entradaAcervoId, tombo, status, estado, dataCriacao, dataAlteracao) {
-    if (new.target !== Categoria) {
+  constructor(id, entradaAcervoId, acervoId, tombo, status, estado, dataCriacao, dataAlteracao, acervo  = null) {
+    if (new.target !== Exemplar) {
       throw new Error(`Use ${this.constructor.name}.criar()`);
     }
     super(id, dataCriacao, dataAlteracao);
-    this.#acervoId = acervoId;
     this.#entradaAcervoId = entradaAcervoId;
+    this.#acervoId = acervoId;
     this.#tombo = tombo;
     this.#status = status;
     this.#estado = estado;
+    this.#acervo = acervo;
   }
   
   // Getters
@@ -26,6 +30,9 @@ class Exemplar  extends Entity{
   get status() { return this.#status; }
   get estado() { return this.#estado; }
   
+  // Relacionamentos
+  get acervo() { return this.#acervo; }
+
   // Alteração do estado
   alterarEstado(estado) {
     this.#estado = estado;
@@ -33,9 +40,9 @@ class Exemplar  extends Entity{
   }
 
   // Fábrica para criação
-  static criar({ acervoId, entradaAcervoId, estado }) {
+  static criar({ entradaAcervoId, acervoId, estado }) {
     let tombo = '314sd5'; //logica para gerar numero de tombo
-    return new Exemplar(null, acervoId, entradaAcervoId, tombo, 'disponivel', estado, new Date(), null);
+    return new Exemplar(null, entradaAcervoId, acervoId, tombo, 'disponivel', estado, new Date(), null);
   }
 }
   

@@ -9,8 +9,11 @@ class Infracao extends Entity {
   #motivo;
   #dataInicio;
   #dataFim;
+
+  // Relacionamentos
+  #usuario;
   
-  constructor(id, usuarioId, tipoInfracao, grauInfracao, status, motivo, dataInicio, dataFim, dataCriacao, dataAlteracao) {
+  constructor(id, usuarioId, tipoInfracao, grauInfracao, status, motivo, dataInicio, dataFim, dataCriacao, dataAlteracao, usuario = undefined) {
     if (new.target !== Infracao) {
       throw new Error(`Use ${this.constructor.name}.criar()`);
     }
@@ -22,6 +25,7 @@ class Infracao extends Entity {
     this.#motivo = motivo;
     this.#dataInicio = dataInicio;
     this.#dataFim = dataFim;
+    this.#usuario = usuario;
   }
   
   // Getters
@@ -33,6 +37,9 @@ class Infracao extends Entity {
   get dataInicio() { return this.#dataInicio; }
   get dataFim() { return this.#dataFim; }
   
+  // Relacionamentos
+  get usuario() { return this.#usuario; }
+
   // Alteração dos dados
   alterar({ tipoInfracao, grauInfracao, motivo, dataFim }) {
     this.#tipoInfracao = tipoInfracao;

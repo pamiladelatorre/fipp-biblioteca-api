@@ -31,9 +31,9 @@ class Acervo extends Entity {
     ativo, 
     dataCriacao, 
     dataAlteracao,
-    autor = null,
-    genero = null,
-    categoria = null
+    autor = undefined,
+    genero = undefined,
+    categoria = undefined
   ) {
     if (new.target !== Acervo) {
       throw new Error(`Use ${this.constructor.name}.criar()`);

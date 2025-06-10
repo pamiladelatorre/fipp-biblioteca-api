@@ -7,7 +7,11 @@ class EntradaAcervo extends Entity {
   #quantidade;
   #dataEntrada;
   
-  constructor(id, acervoId, tipoOrigem, origemId, quantidade, dataEntrada, dataCriacao, dataAlteracao) {
+  // Relacionamentos
+  #acervo;
+  #origem;
+
+  constructor(id, acervoId, tipoOrigem, origemId, quantidade, dataEntrada, dataCriacao, dataAlteracao, acervo = undefined, origem = undefined) {
     if (new.target !== EntradaAcervo) {
       throw new Error(`Use ${this.constructor.name}.criar()`);
     }
@@ -17,6 +21,8 @@ class EntradaAcervo extends Entity {
     this.#origemId = origemId;
     this.#quantidade = quantidade;
     this.#dataEntrada = dataEntrada;
+    this.#acervo = acervo;
+    this.#origem = origem;
   }
   
   // Getters
@@ -26,6 +32,10 @@ class EntradaAcervo extends Entity {
   get quantidade() { return this.#quantidade; }
   get dataEntrada() { return this.#dataEntrada; }
   
+  // Relacionamentos
+  get acervo() { return this.#acervo; }
+  get origem() { return this.#origem; }
+
   // Alteração dos dados
   alterar({ acervoId, tipoOrigem, origemId, quantidade }) {
     this.#acervoId = acervoId;
