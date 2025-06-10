@@ -5,10 +5,11 @@ import { Result } from '../utils/Result.js';
 
 class MovimetacaoExemplarService {
 
-    async obterPorFiltro({ exemplarId, usuarioId, etapa, status, dataInicio, dataPrevista, dataFim }){
+    async obterPorFiltro({ acervo, tombo, usuario, etapa, status, dataInicio, dataPrevista, dataFim }){
         const filtro = {
-            ...(exemplarId && { exemplarId: { valor: exemplarId } }),
-            ...(usuarioId && { usuarioId: { valor: usuarioId } }),
+            ...(acervo && { titulo: { valor: acervo, like: true } }),
+            ...(tombo && { tombo: { valor: tombo, like: true } }),
+            ...(usuario && { nome: { valor: usuario, like: true } }),
             ...(etapa && { etapa: { valor: etapa } }),
             ...(status && { status: { valor: status } }),
             ...(dataInicio && { dataInicio: { valor: dataInicio } }),
