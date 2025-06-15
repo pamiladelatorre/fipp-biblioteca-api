@@ -1,6 +1,5 @@
 import BaseDAO from './BaseDAO.js';
 import Assinatura from '../models/Assinatura.js';
-import { query, execute, transaction } from '../infra/database.js';
 
 class AssinaturaDAO extends BaseDAO {
   constructor() {
@@ -31,21 +30,10 @@ class AssinaturaDAO extends BaseDAO {
   
   
 
-  async buscarPorId(id) {
+ /* async buscarPorId(id) {
     const [row] = await query(`SELECT * FROM assinaturas WHERE id = ?`, [id]);
     return row ? this.mapRowToEntity(row) : null;
   }
-
-  async inserir(assinatura) {
-    if (!(assinatura instanceof Assinatura)) throw new Error("Instância inválida de Assinatura.");
-
-    await transaction(async (conn) => {
-      await super.inserir(assinatura, conn);
-    });
-
-    return assinatura;
-  }
-
 
 
   async atualizar(assinatura) {
@@ -73,6 +61,8 @@ class AssinaturaDAO extends BaseDAO {
 function formatarDataParaMySQL(data) {
   if (!data) return null;
   return new Date(data).toISOString().split('T')[0]; // "2025-06-02"
+
+}*/
 }
 
 

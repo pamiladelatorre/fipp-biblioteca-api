@@ -49,14 +49,17 @@ export default class BaseDAO {
         if (!(model instanceof Entity)) {
             throw new Error("Instância de entidade inválida.");
         }
+        
 
         const dados = extractEntityDataForDb(model, excluirCampos, true);
+         console.log('[BaseDAO][inserir] Dados para INSERT:', dados);
 
         const campos = Object.keys(dados);
         const valores = Object.values(dados);
         const placeholders = campos.map(() => '?').join(', ');
 
         const sql = `INSERT INTO ${this.tabela} (${campos.join(', ')}) VALUES (${placeholders})`;
+
 
         const resultado = await execute(sql, valores, conn);
 

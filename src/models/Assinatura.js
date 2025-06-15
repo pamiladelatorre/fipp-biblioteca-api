@@ -53,9 +53,22 @@ class Assinatura extends Entity {
   }
 
   // Fábrica para criação
-  static criar({ fornecedorId, descricao, periodicidade, numeroContrato, valor, dataInicio, dataFim }) {
-    return new Assinatura(null, fornecedorId, descricao, periodicidade, numeroContrato, valor, dataInicio, dataFim, true, new Date(), null);
-  }
+ static criar({ fornecedorId, descricao, periodicidade, numeroContrato, valor, dataInicio, dataFim }) {
+  return new Assinatura(
+    null,
+    fornecedorId,
+    descricao,
+    periodicidade,
+    numeroContrato,
+    valor,
+    dataInicio,
+    dataFim,
+    true,
+    new Date(),
+    null
+  );
+}
+
 }
   
 export default Assinatura;

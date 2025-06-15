@@ -33,7 +33,7 @@ authRouter.use('/motivos-baixa', motivoBaixaRoutes);
 authRouter.use('/movimentacoes-exemplar', movimetacaoExemplarRoutes);
 authRouter.use('/usuarios', usuarioRoutes);
 authRouter.use('/doadores', doadorRoutes);
-authRouter.use('/assinaura', assinaturaRoutes);
+authRouter.use('/assinaturas', assinaturaRoutes);
 
 
 export default (app) => {
