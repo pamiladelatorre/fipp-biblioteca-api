@@ -4,6 +4,7 @@ import { notFoundIfNull, notFoundIfEmpty, normalizeToBit } from '../utils/Servic
 import { Result } from '../utils/Result.js';
 import { errorFactory } from "../utils/errorFactory.js";
 
+
 class FornecedorService {
     async adicionar(payload){
         const { cnpj } = payload;
@@ -24,6 +25,11 @@ class FornecedorService {
         const fornecedor = await FornecedorDAO.inserir(novoFornecedor);
         return Result.ok(fornecedor);
     }
+
+
+
+
+    
 
     async obterPorId(id){
         const fornecedor = await FornecedorDAO.buscarPorId(id);
@@ -118,6 +124,17 @@ class FornecedorService {
 
         return Result.ok();
     }
+
+    async listarParaRelatorio() {
+        return await FornecedorDAO.listarParaRelatorio();
+    }
+
+
+
 }
+
+
+
+
 
 export default new FornecedorService();

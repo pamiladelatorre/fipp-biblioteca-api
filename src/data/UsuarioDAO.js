@@ -44,6 +44,13 @@ class UsuarioDAO extends BaseDAO {
 
         return row ? this.mapRowToEntity(row) : null
     }
+
+async buscarTodos() {
+  const rows = await query('SELECT id, cpf, nome, data_nascimento, telefone, email, tipo_usuario, bloqueado, ativo FROM usuarios');
+  return rows;
+}
+
+
 }
 
 export default UsuarioDAO.getInstance();

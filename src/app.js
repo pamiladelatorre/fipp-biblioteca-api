@@ -14,6 +14,13 @@ app.use(cors({
 app.use(express.json()); // Parser para requisições com JSON
 app.use(express.urlencoded({ extended: true })); // Suporte para form-urlencoded
 
+
+import reportsRoutes from './routes/reports.routes.js';
+app.use('/api', reportsRoutes);
+
+
+
+
 // Rotas da aplicação
 routes(app);
 

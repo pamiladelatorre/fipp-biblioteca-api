@@ -14,7 +14,8 @@ import infracaoRoutes from './infracao.routes.js';
 import motivoBaixaRoutes from './motivoBaixa.routes.js';
 import movimetacaoExemplarRoutes from './movimetacaoExemplar.routes.js';
 import usuarioRoutes from './usuario.routes.js';
-import doadorRoutes from './doador.routes.js'
+import doadorRoutes from './doador.routes.js';
+import assinaturaRoutes from './assinatura.routes.js'
 
 const authRouter = Router();
 authRouter.use(auth);  // Aplica o middleware auth a todas as rotas subsequentes
@@ -32,6 +33,7 @@ authRouter.use('/motivos-baixa', motivoBaixaRoutes);
 authRouter.use('/movimentacoes-exemplar', movimetacaoExemplarRoutes);
 authRouter.use('/usuarios', usuarioRoutes);
 authRouter.use('/doadores', doadorRoutes);
+authRouter.use('/assinaura', assinaturaRoutes);
 
 
 export default (app) => {

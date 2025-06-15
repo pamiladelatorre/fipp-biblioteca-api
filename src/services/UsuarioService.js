@@ -73,6 +73,14 @@ class UsuarioService {
         const usuarios = await UsuarioDAO.buscarPorFiltro(filtro);
         return notFoundIfEmpty(usuarios, 'Usuario');
     }
+
+async listarParaRelatorio() {
+  const usuarios = await UsuarioDAO.buscarTodos();
+  return usuarios;
+}
+
+
+
 }
 
 export default new UsuarioService();

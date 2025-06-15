@@ -42,6 +42,28 @@ class FornecedorDAO extends BaseDAO {
         );
     }
 
+    
+    
+async listarParaRelatorio() {
+  const rows = await query(`
+    SELECT 
+      id,
+      cnpj,
+      razao_social AS nome,
+      telefone,
+      email,
+      endereco,
+      inscricao_estadual,
+      representante,
+      ativo,
+      data_criacao,
+      data_alteracao
+    FROM fornecedores
+  `);
+  return rows;
+}
+
+
     async buscarPorId(id) {
         const [row] = await query(`SELECT * FROM fornecedores WHERE id = ?`, [id]);
         if (!row) return null;
@@ -122,6 +144,8 @@ class FornecedorDAO extends BaseDAO {
                   conn
                 );
             }
+
+            
 
             // Inserir novos métodos de pagamento (sem ID)
             for (const metodo of fornecedor.metodosPagamento.filter(m => !m.id)) {
