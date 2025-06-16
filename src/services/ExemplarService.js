@@ -14,7 +14,16 @@ class ExemplarService {
         };
         const exemplares = await ExemplarDAO.buscarPorFiltro(filtro);
         return notFoundIfEmpty(exemplares, 'Exemplar');
+    
+    }
+
+        async listarParaRelatorio() {
+        return await ExemplarDAO.listarParaRelatorio();
     }
 }
+
+
+
+
 
 export default new ExemplarService();

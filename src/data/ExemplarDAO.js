@@ -27,6 +27,22 @@ class ExemplarDAO  extends BaseDAO {
         );
     }
 
+    async listarParaRelatorio() {
+  const sql = `
+    SELECT 
+      e.id,
+      e.tombo,
+      e.status,
+      e.estado,
+      a.titulo AS titulo_acervo
+    FROM exemplares e
+    INNER JOIN acervos a ON a.id = e.acervo_id
+  `;
+  const rows = await query(sql);
+  return rows;
+}
+
+
     async buscarPorFiltro(filtro = {}) {
         let sql = `
             SELECT 

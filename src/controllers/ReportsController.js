@@ -3,6 +3,7 @@ import pdfService from '../services/pdfService.js';
 import UsuarioService from '../services/UsuarioService.js';
 import FornecedorService from '../services/FornecedorService.js';
 import AcervoService from '../services/AcervoService.js';
+import ExemplarService from '../services/ExemplarService.js';
 
 // --- USUÁRIOS ---
 const gerarExcelUsuarios = async (req, res) => {
@@ -156,11 +157,62 @@ const gerarPDFAcervos = async (req, res) => {
 };
 
 
+// --- EXEMPLARES ---
+
+const gerarExcelExemplares = async (req, res) => {
+  try {
+    const dados = await ExemplarService.listarParaRelatorio();
+
+    const colunas = [
+      { header: 'ID', key: 'id' },
+      { header: 'Tombo', key: 'tombo' },
+      { header: 'Título do Acervo', key: 'titulo_acervo' },
+      { header: 'Status', key: 'status' },
+      { header: 'Estado', key: 'estado' }
+    ];
+
+    const buffer = await excelService.gerarExcel(dados, colunas, 'Exemplares');
+    res.setHeader('Content-Disposition', 'attachment; filename=exemplares.xlsx');
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.send(buffer);
+  } catch (error) {
+    res.status(500).json({ erro: 'Erro ao gerar Excel', detalhes: error.message });
+  }
+};
+
+const gerarPDFExemplares = async (req, res) => {
+  try {
+    const dados = await ExemplarService.listarParaRelatorio();
+
+    const campos = [
+      { label: 'ID', key: 'id' },
+      { label: 'Tombo', key: 'tombo' },
+      { label: 'Título do Acervo', key: 'titulo_acervo' },
+      { label: 'Status', key: 'status' },
+      { label: 'Estado', key: 'estado' }
+    ];
+
+    const buffer = await pdfService.gerarPDF(dados, campos, 'Relatório de Exemplares');
+    res.setHeader('Content-Disposition', 'attachment; filename=exemplares.pdf');
+    res.setHeader('Content-Type', 'application/pdf');
+    res.send(buffer);
+  } catch (error) {
+    res.status(500).json({ erro: 'Erro ao gerar PDF', detalhes: error.message });
+  }
+};
+
+
+
+
+
+
 export default {
   gerarExcelUsuarios,
   gerarPDFUsuarios,
   gerarExcelFornecedores,
   gerarPDFFornecedores,
   gerarExcelAcervos,
-  gerarPDFAcervos
+  gerarPDFAcervos,
+  gerarPDFExemplares,
+  gerarExcelExemplares
 };
