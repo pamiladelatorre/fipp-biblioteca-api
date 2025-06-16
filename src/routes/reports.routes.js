@@ -10,6 +10,9 @@ router.get('/relatorios/usuarios/pdf', reportsController.gerarPDFUsuarios);
 router.get('/relatorios/fornecedores/excel', reportsController.gerarExcelFornecedores);
 router.get('/relatorios/fornecedores/pdf', reportsController.gerarPDFFornecedores);
 
+router.get('/relatorios/acervos/excel', reportsController.gerarExcelAcervos);
+router.get('/relatorios/acervos/pdf', reportsController.gerarPDFAcervos);
+
 
 
 export default router;

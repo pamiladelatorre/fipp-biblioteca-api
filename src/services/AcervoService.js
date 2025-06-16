@@ -45,6 +45,13 @@ class AcervoService {
         const acervos = await AcervoDAO.buscarPorFiltro(filtro);
         return notFoundIfEmpty(acervos, 'Acervo');
     }
+
+    async listarParaRelatorio() {
+        return await AcervoDAO.listarParaRelatorio();
+    }
+
+
+
 }
 
 export default new AcervoService();

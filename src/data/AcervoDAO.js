@@ -5,6 +5,7 @@ import Autor from '../models/Autor.js';
 import Genero from '../models/Genero.js';
 import Categoria from '../models/Categoria.js';
 
+
 class AcervoDAO extends BaseDAO {
     constructor() {
         super("acervos"); // Nome da tabela
@@ -62,6 +63,35 @@ class AcervoDAO extends BaseDAO {
         const acervo = super.atualizar(model, conn, ['dataCriacao', 'autor', 'genero', 'categoria']);
         return acervo;
     }
+
+    async listarParaRelatorio() {
+    const sql = `
+        SELECT 
+            ac.id,
+            ac.titulo,
+            ac.numero_edicao,
+            ac.editora,
+            ac.data_publicacao,
+            ac.numero_pagina,
+            ac.isbn,
+            ac.ativo,
+            au.nome AS autor,
+            g.descricao AS genero,
+            c.descricao AS categoria
+        FROM acervos ac
+        INNER JOIN autores au ON au.id = ac.autor_id
+        INNER JOIN generos g ON g.id = ac.genero_id
+        INNER JOIN categorias c ON c.id = ac.categoria_id
+    `;
+
+    const rows = await query(sql);
+    return rows; // Aqui você não precisa fazer mapRowToEntity, pois o resultado já vem formatado para o relatório
+}
+
+
+
+
+
 }
 
 // Exporta instância padrão

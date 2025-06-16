@@ -2,6 +2,7 @@ import excelService from '../services/excelService.js';
 import pdfService from '../services/pdfService.js';
 import UsuarioService from '../services/UsuarioService.js';
 import FornecedorService from '../services/FornecedorService.js';
+import AcervoService from '../services/AcervoService.js';
 
 // --- USUÁRIOS ---
 const gerarExcelUsuarios = async (req, res) => {
@@ -99,9 +100,67 @@ const gerarPDFFornecedores = async (req, res) => {
   }
 };
 
+// --- ACERVOS ---
+const gerarExcelAcervos = async (req, res) => {
+  try {
+    const dados = await AcervoService.listarParaRelatorio();
+
+    const colunas = [
+      { header: 'ID', key: 'id' },
+      { header: 'Título', key: 'titulo' },
+      { header: 'Autor', key: 'autor' },
+      { header: 'Gênero', key: 'genero' },
+      { header: 'Categoria', key: 'categoria' },
+      { header: 'Edição', key: 'numero_edicao' },
+      { header: 'Editora', key: 'editora' },
+      { header: 'Publicação', key: 'data_publicacao', format: 'data' },
+      { header: 'Páginas', key: 'numero_pagina' },
+      { header: 'ISBN', key: 'isbn' },
+      { header: 'Ativo', key: 'ativo', format: 'boolean' }
+    ];
+
+    const buffer = await excelService.gerarExcel(dados, colunas, 'Acervos');
+    res.setHeader('Content-Disposition', 'attachment; filename=acervos.xlsx');
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.send(buffer);
+  } catch (error) {
+    res.status(500).json({ erro: 'Erro ao gerar Excel', detalhes: error.message });
+  }
+};
+
+const gerarPDFAcervos = async (req, res) => {
+  try {
+    const dados = await AcervoService.listarParaRelatorio();
+
+    const campos = [
+      { label: 'ID', key: 'id' },
+      { label: 'Título', key: 'titulo' },
+      { label: 'Autor', key: 'autor' },
+      { label: 'Gênero', key: 'genero' },
+      { label: 'Categoria', key: 'categoria' },
+      { label: 'Edição', key: 'numero_edicao' },
+      { label: 'Editora', key: 'editora' },
+      { label: 'Publicação', key: 'data_publicacao', format: 'data' },
+      { label: 'Páginas', key: 'numero_pagina' },
+      { label: 'ISBN', key: 'isbn' },
+      { label: 'Ativo', key: 'ativo', format: 'boolean' }
+    ];
+
+    const buffer = await pdfService.gerarPDF(dados, campos, 'Relatório de Acervos');
+    res.setHeader('Content-Disposition', 'attachment; filename=acervos.pdf');
+    res.setHeader('Content-Type', 'application/pdf');
+    res.send(buffer);
+  } catch (error) {
+    res.status(500).json({ erro: 'Erro ao gerar PDF', detalhes: error.message });
+  }
+};
+
+
 export default {
   gerarExcelUsuarios,
   gerarPDFUsuarios,
   gerarExcelFornecedores,
-  gerarPDFFornecedores
+  gerarPDFFornecedores,
+  gerarExcelAcervos,
+  gerarPDFAcervos
 };
