@@ -7,4 +7,9 @@ const router = new Router();
 // Lista acervos por filtrados
 router.get('', MovimetacaoExemplarController.obterPorFiltro);
 
+router.post('', MovimetacaoExemplarController.criar);
+
+
+
+
 export default router;

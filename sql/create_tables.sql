@@ -232,6 +232,9 @@ CREATE TABLE baixas_exemplares (
   CONSTRAINT pk_baixas_exemplares PRIMARY KEY (id)
 );
 
+
+
+
 -- FOREIGN KEYS
 
 ALTER TABLE infracoes ADD CONSTRAINT fk_infracoes_usuario_id FOREIGN KEY (usuario_id) REFERENCES usuarios(id);
