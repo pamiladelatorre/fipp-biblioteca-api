@@ -28,6 +28,27 @@ class InfracaoDAO extends BaseDAO {
             new Usuario(row.usuario_id, undefined, row.nome)
         );
     } 
+    async inserir(infracao) {
+    const sql = `
+        INSERT INTO infracoes (usuario_id, tipo_infracao, grau_infracao, status, motivo, data_inicio, data_fim, data_criacao, data_alteracao) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+    const valores = [
+       infracao.usuarioId,
+        infracao.tipoInfracao,
+        infracao.grauInfracao,
+        infracao.status,
+        infracao.motivo,
+        new Date(infracao.dataInicio).toISOString().split("T")[0], // Converte antes do INSERT
+        infracao.dataFim ? new Date(infracao.dataFim).toISOString().split("T")[0] : null, 
+        new Date(),
+        null
+    ];
+
+    
+
+    return await query(sql, valores);
+}
 
      async buscarPorFiltro(filtro = {}) {
         let sql = `

@@ -8,6 +8,12 @@ class InfracaoController {
         const result = await InfracaoService.obterPorFiltro(req.query);
         return handleResult(result, res); // 200: Success
     });
+
+    adicionar = asyncWrapper(async (req, res) => {
+        const result = await InfracaoService.adicionar(req.body);
+        return handleResult(result, res, 201); // 201: Created
+    });
+ 
 }
 
 export default new InfracaoController();

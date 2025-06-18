@@ -53,6 +53,7 @@ class Infracao extends Entity {
   static criar({ usuarioId, tipoInfracao, grauInfracao, motivo, dataInicio, dataFim }) {
     return new Infracao(null, usuarioId, tipoInfracao, grauInfracao, 'pendente', motivo, dataInicio, dataFim, true, new Date(), null);
   }
+  
 }
   
 export default Infracao;
