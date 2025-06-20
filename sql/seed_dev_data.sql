@@ -121,23 +121,17 @@ VALUES
 (1, 'compra', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Tabela exemplares
-INSERT INTO exemplares (acervo_id, entrada_acervo_id, tombo, status, estado, data_criacao, data_alteracao)
+INSERT INTO exemplares (entrada_acervo_id, acervo_id, motivo_baixa_id, tombo, status, estado, observacoes_baixa, data_criacao, data_alteracao)
 VALUES
-(1, 1, 'TOMBO001', 'disponivel', 'novo', CURRENT_TIMESTAMP, NULL),
-(1, 1, 'TOMBO002', 'reservado', 'novo', CURRENT_TIMESTAMP, NULL),
-(1, 1, 'TOMBO003', 'baixado', 'danificado', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 1, NULL, 'c89f7a7e', 'disponivel', 'novo', NULL, CURRENT_TIMESTAMP, NULL),
+(1, 1, NULL, 'c23aea42', 'reservado', 'novo', NULL, CURRENT_TIMESTAMP, NULL),
+(1, 1, 1,'71d3ebac', 'baixado', 'danificado', 'Dano irreparável no exemplar', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Tabela movimentacoes_exemplares
 INSERT INTO movimentacoes_exemplares (exemplar_id, usuario_id, etapa, status, grupo_id, referencia_id, data_inicio, data_prevista, data_fim, numero_renovacao, observacoes) 
 VALUES 
 (1, 1, 'reserva', 'ativa', NULL, NULL, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 DAY), NULL, 0, 'Reserva do exemplar'),
 (2, 2, 'emprestimo', 'ativa', NULL, NULL, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 DAY), NULL, 0, 'Primeiro empréstimo do usuário');
-
--- Tabela baixas_exemplares
-INSERT INTO baixas_exemplares (exemplar_id, motivo_baixa_id, observacoes, data_criacao)
-VALUES
-(3, 1, 'Dano irreparável no exemplar', CURRENT_TIMESTAMP);
-
 
 -- EX? movimentacoes_exemplares 
 

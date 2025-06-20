@@ -194,11 +194,13 @@ CREATE TABLE entradas_acervos (
 
 CREATE TABLE exemplares (
   id BIGINT AUTO_INCREMENT,
-  acervo_id BIGINT NOT NULL,
   entrada_acervo_id BIGINT NOT NULL,
+  acervo_id BIGINT NOT NULL,
+  motivo_baixa_id BIGINT NULL,
   tombo VARCHAR(255) NOT NULL,
   status ENUM('disponivel', 'emprestado', 'reservado', 'baixado') NOT NULL,
   estado ENUM('novo', 'usado', 'danificado') NOT NULL,
+  observacoes_baixa TEXT,
   data_criacao TIMESTAMP NOT NULL,
   data_alteracao TIMESTAMP NULL,
   CONSTRAINT pk_exemplares PRIMARY KEY (id),
@@ -222,18 +224,6 @@ CREATE TABLE movimentacoes_exemplares (
   data_atualizacao TIMESTAMP NULL,
   CONSTRAINT pk_movimentacoes_exemplares PRIMARY KEY (id)
 );
-
-CREATE TABLE baixas_exemplares (
-  id BIGINT AUTO_INCREMENT,
-  exemplar_id BIGINT NOT NULL,
-  motivo_baixa_id BIGINT NOT NULL,
-  observacoes TEXT,
-  data_criacao TIMESTAMP NOT NULL,
-  CONSTRAINT pk_baixas_exemplares PRIMARY KEY (id)
-);
-
-
-
 
 -- FOREIGN KEYS
 
@@ -260,13 +250,11 @@ ALTER TABLE compras_itens ADD CONSTRAINT fk_comp_itens_acervo_id FOREIGN KEY (ac
 
 ALTER TABLE entradas_acervos ADD CONSTRAINT fk_entradas_acervo_id FOREIGN KEY (acervo_id) REFERENCES acervos(id);
 
-ALTER TABLE exemplares ADD CONSTRAINT fk_exemplares_acervo_id FOREIGN KEY (acervo_id) REFERENCES acervos(id);
 ALTER TABLE exemplares ADD CONSTRAINT fk_exemplares_entrada_id FOREIGN KEY (entrada_acervo_id) REFERENCES entradas_acervos(id);
+ALTER TABLE exemplares ADD CONSTRAINT fk_exemplares_acervo_id FOREIGN KEY (acervo_id) REFERENCES acervos(id);
+ALTER TABLE exemplares ADD CONSTRAINT fk_exemplares_baixas_motivo_id FOREIGN KEY (motivo_baixa_id) REFERENCES motivos_baixas(id);
 
 ALTER TABLE movimentacoes_exemplares ADD CONSTRAINT fk_mov_exemp_exemplar_id FOREIGN KEY (exemplar_id) REFERENCES exemplares(id);
 ALTER TABLE movimentacoes_exemplares ADD CONSTRAINT fk_mov_exemp_usuario_id FOREIGN KEY (usuario_id) REFERENCES usuarios(id);
 ALTER TABLE movimentacoes_exemplares ADD CONSTRAINT fk_mov_exemp_grupo_id FOREIGN KEY (grupo_id) REFERENCES movimentacoes_exemplares(id);
 ALTER TABLE movimentacoes_exemplares ADD CONSTRAINT fk_mov_exemp_ref_id FOREIGN KEY (referencia_id) REFERENCES movimentacoes_exemplares(id);
-
-ALTER TABLE baixas_exemplares ADD CONSTRAINT fk_baixas_exemplar_id FOREIGN KEY (exemplar_id) REFERENCES exemplares(id);
-ALTER TABLE baixas_exemplares ADD CONSTRAINT fk_baixas_motivo_id FOREIGN KEY (motivo_baixa_id) REFERENCES motivos_baixas(id);

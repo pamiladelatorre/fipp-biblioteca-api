@@ -1,6 +1,5 @@
 -- DROP todas as tabelas em ordem de dependência reversa (evita erros com FKs)
 
-DROP TABLE IF EXISTS baixas_exemplares;
 DROP TABLE IF EXISTS movimentacoes_exemplares;
 DROP TABLE IF EXISTS exemplares;
 DROP TABLE IF EXISTS entradas_acervos;
