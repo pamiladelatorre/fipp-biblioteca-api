@@ -8,10 +8,12 @@ class MovimetacaoExemplarController {
         return handleResult(result, res); // 200: Success
     });
 
-    criar = asyncWrapper(async (req, res) => {
-        const result = await MovimetacaoExemplarService.criar(req.body);
-        return handleResult(result, res, 201); // usando middleware para tratar response
-    });
+criar = asyncWrapper(async (req, res) => {
+  console.log('Requisição para criar recebida:', req.body); // <== LOG
+  const result = await MovimetacaoExemplarService.criar(req.body);
+  return handleResult(result, res, 201);
+});
+
 }
 
 

@@ -6,18 +6,28 @@ import Exemplar from '../models/Exemplar.js';
 import Acervo from '../models/Acervo.js';
 import Usuario from '../models/Usuario.js';
 
-// Função que limpa undefined, ignora campos não necessários e troca por null
-function limparDadosParaInsert(obj) {
-  const res = {};
-  for (const key in obj) {
-    // Ignora propriedades que não são colunas na tabela
-    if (key === 'exemplar' || key === 'usuario') continue;
 
-    // Substitui undefined por null
-    res[key] = obj[key] === undefined ? null : obj[key];
-  }
-  return res;
+// Função que limpa undefined, ignora campos não necessários e troca por null
+function limparDadosParaInsert(entidade) {
+  return {
+    exemplar_id: entidade.exemplarId,
+    usuario_id: entidade.usuarioId,
+    etapa: entidade.etapa,
+    status: entidade.status,
+    grupo_id: entidade.grupoId,
+    referencia_id: entidade.referenciaId,
+    data_inicio: entidade.dataInicio,
+    data_prevista: entidade.dataPrevista,
+    data_fim: entidade.dataFim,
+    numero_renovacao: entidade.numeroRenovacao,
+    data_criacao: entidade.dataCriacao,
+    data_atualizacao: entidade.dataAlteracao
+  };
 }
+
+
+
+
 
 class MovimetacaoExemplarDAO extends BaseDAO {
   constructor() {
@@ -42,7 +52,7 @@ class MovimetacaoExemplarDAO extends BaseDAO {
       row.data_fim,
       row.numero_renovacao,
       row.data_criacao,
-      row.data_alteracao,
+      row.data_atualizacao,
       new Exemplar(
         row.exemplar_id,
         undefined,
@@ -93,10 +103,21 @@ class MovimetacaoExemplarDAO extends BaseDAO {
     return rows.map((row) => this.mapRowToEntity(row));
   }
 
-  async criar(movimentacao) {
-    const dadosLimpos = limparDadosParaInsert(movimentacao);
-    return super.inserir(dadosLimpos);
-  }
+
+async criar(movimentacao) {
+  console.log("Requisição para criar recebida:", movimentacao);
+  const entidade = MovimetacaoExemplar.criar(movimentacao);
+  console.log("Entidade:", entidade);
+
+  return this.inserir(entidade);
+}
+
+
+
+
+
+
+
 }
 
 export default MovimetacaoExemplarDAO.getInstance();
