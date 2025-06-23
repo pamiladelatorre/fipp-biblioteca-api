@@ -14,6 +14,18 @@ criar = asyncWrapper(async (req, res) => {
   return handleResult(result, res, 201);
 });
 
+registrarDevolucao = asyncWrapper(async (req, res) => {
+    const result = await MovimetacaoExemplarService.registrarDevolucao(req.body);
+    return handleResult(result, res, 201);
+});
+renovar = asyncWrapper(async (req, res) => {
+    const id = req.params.id;
+    const result = await MovimetacaoExemplarService.renovar(id);
+    return handleResult(result, res);
+});
+
+
+
 }
 
 

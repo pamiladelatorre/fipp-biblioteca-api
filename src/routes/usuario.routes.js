@@ -14,6 +14,9 @@ router.get('', UsuarioController.obterPorFiltro);
 
 // Lista usuários ativos (rota fixa deve vir antes de parâmetros dinâmicos)
 router.get('/ativos', UsuarioController.obterAtivas);
+// Lista exemplares emprestados pelo usuário (ativos e não devolvidos)
+router.get('/:id/exemplares-emprestados', validate('params', idParamSchema), UsuarioController.obterExemplaresEmprestados);
+
 
 // Consulta por ID
 router.get('/:id', validate('params', idParamSchema), UsuarioController.obterPorId);
@@ -34,5 +37,7 @@ router.patch(
     validate('params', idParamSchema),
      UsuarioController.alterarStatusBloqueado
 );
+
+
 
 export default router;

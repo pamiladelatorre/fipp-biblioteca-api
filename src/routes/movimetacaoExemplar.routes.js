@@ -9,6 +9,11 @@ router.get('', MovimetacaoExemplarController.obterPorFiltro);
 
 router.post('', MovimetacaoExemplarController.criar);
 
+router.put('/devolucao', MovimetacaoExemplarController.registrarDevolucao);
+
+router.put('/:id/renovar', MovimetacaoExemplarController.renovar);
+
+
 
 
 

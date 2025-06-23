@@ -10,7 +10,7 @@ class MovimetacaoExemplar extends Entity {
     #dataInicio;
     #dataPrevista;
     #dataFim;
-    #numeroRenovacao
+    #numeroRenovacao;
 
     // Relacionamentos
     #exemplar;
@@ -63,48 +63,73 @@ class MovimetacaoExemplar extends Entity {
     get dataFim() { return this.#dataFim; }
     get numeroRenovacao() { return this.#numeroRenovacao; }
 
+    // Setters (adicionados para permitir atualização)
+    set etapa(valor) {
+        this.#etapa = valor;
+    }
+
+    set status(valor) {
+        this.#status = valor;
+    }
+
+    set dataFim(valor) {
+        this.#dataFim = valor;
+    }
+
+    set dataAtualizacao(valor) {
+        this._dataAtualizacao = valor;
+        super.dataAtualizacao = valor;  // se dataAtualizacao está no pai e tem setter
+    }
+
+    set dataPrevista(valor) {
+        this.#dataPrevista = valor;
+    }
+
+ get numeroRenovacao() { return this.#numeroRenovacao; }
+
+set numeroRenovacao(valor) {
+  this.#numeroRenovacao = valor;
+}
+
     // Relacionamentos
     get exemplar() { return this.#exemplar; }
     get usuario() { return this.#usuario; }
 
     // Fábrica para criação
-static criar({ exemplarId, usuarioId, etapa, dataCriacao = new Date(), dataAtualizacao = new Date() }) {
-  return new MovimetacaoExemplar(
-    null,              // id
-    exemplarId,
-    usuarioId,
-    etapa,
-    'ativa',
-    null,              // grupoId
-    null,              // referenciaId
-    new Date(),        // dataInicio
-    new Date(),        // dataPrevista (deveria calcular com regra real)
-    null,              // dataFim
-    0,                 // numeroRenovacao
-    dataCriacao,       // dataCriacao
-    dataAtualizacao      // dataAlteracao
-  );
-}
+    static criar({ exemplarId, usuarioId, etapa, dataCriacao = new Date(), dataAtualizacao = new Date() }) {
+      return new MovimetacaoExemplar(
+        null,              // id
+        exemplarId,
+        usuarioId,
+        etapa,
+        'ativa',
+        null,              // grupoId
+        null,              // referenciaId
+        new Date(),        // dataInicio
+        new Date(),        // dataPrevista (deveria calcular com regra real)
+        null,              // dataFim
+        0,                 // numeroRenovacao
+        dataCriacao,       // dataCriacao
+        dataAtualizacao      // dataAlteracao
+      );
+    }
 
-toObject() {
-  return {
-    exemplar_id: this.exemplarId,
-    usuario_id: this.usuarioId,
-    etapa: this.etapa,
-    status: this.status,
-    grupo_id: this.grupoId,
-    referencia_id: this.referenciaId,
-    data_inicio: this.dataInicio,
-    data_prevista: this.dataPrevista,
-    data_fim: this.dataFim,
-    numero_renovacao: this.numeroRenovacao,
-    data_criacao: this.dataCriacao,
-    data_atualizacao: this.dataAtualizacao,
-  };
-}
-
-
-
+    toObject() {
+      return {
+        exemplar_id: this.exemplarId,
+        usuario_id: this.usuarioId,
+        etapa: this.etapa,
+        status: this.status,
+        grupo_id: this.grupoId,
+        referencia_id: this.referenciaId,
+        data_inicio: this.dataInicio,
+        data_prevista: this.dataPrevista,
+        data_fim: this.dataFim,
+        numero_renovacao: this.numeroRenovacao,
+        data_criacao: this.dataCriacao,
+        data_atualizacao: this.dataAtualizacao,
+      };
+    }
 }
 
 export default MovimetacaoExemplar;
