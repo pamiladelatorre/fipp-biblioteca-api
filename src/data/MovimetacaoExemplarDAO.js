@@ -64,14 +64,19 @@ class MovimetacaoExemplarDAO extends BaseDAO {
     const valores = [];
     const condicoes = [];
 
-    for (const [campoCamel, config] of Object.entries(filtro)) {
-      const campo = camelToSnake(campoCamel);
-      const { valor, like = false } =
-        typeof config === "object" && config !== null ? config : { valor: config };
+   for (const [campoCamel, config] of Object.entries(filtro)) {
+  const campo = camelToSnake(campoCamel);
+  const { valor, like = false } =
+    typeof config === "object" && config !== null ? config : { valor: config };
 
-      condicoes.push(`${campo} ${like ? "LIKE" : "="} ?`);
-      valores.push(like ? `%${valor}%` : valor);
-    }
+  // Adiciona prefixo 'me.' para evitar ambiguidade
+  const prefixo = ['status', 'etapa', 'data_inicio', 'data_prevista', 'data_fim'].includes(campo)
+    ? 'me.'
+    : ''; // deixe sem prefixo para joins como 'nome', 'titulo'
+
+  condicoes.push(`${prefixo}${campo} ${like ? "LIKE" : "="} ?`);
+  valores.push(like ? `%${valor}%` : valor);
+}
 
     if (condicoes.length > 0) {
       sql += ` WHERE ${condicoes.join(" AND ")}`;
