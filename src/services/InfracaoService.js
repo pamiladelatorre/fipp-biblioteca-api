@@ -34,6 +34,24 @@ class InfracaoService {
         const infracaoInserida = await InfracaoDAO.inserir(novaInfracao);
         return Result.ok(infracaoInserida);
     }
+
+    
+    async obterPorId(id) {
+        const infracao = await InfracaoDAO.buscarPorId(id);
+        return notFoundIfNull(infracao, 'Infração', 'o');
+    }
+
+      async alterar(id, payload){
+          const infracao = await InfracaoDAO.buscarPorId(id);
+          const validacao = notFoundIfNull(infracao, 'Infração', 'a');
+          if (validacao.isFailure()) return validacao;
+  
+          infracao.alterar({ ...payload });
+          await InfracaoDAO.atualizar(infracao);
+          return Result.ok(infracao);
+      }
+
 }
+
 
 export default new InfracaoService();

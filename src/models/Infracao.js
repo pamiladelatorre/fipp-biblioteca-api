@@ -41,11 +41,12 @@ class Infracao extends Entity {
   get usuario() { return this.#usuario; }
 
   // Alteração dos dados
-  alterar({ tipoInfracao, grauInfracao, motivo, dataFim }) {
+  alterar({ tipoInfracao, grauInfracao, motivo, dataFim, status }) {
     this.#tipoInfracao = tipoInfracao;
     this.#grauInfracao = grauInfracao;
     this.#motivo = motivo;
     this.#dataFim = dataFim;
+    this.#status = status;
     this.dataAlteracao = new Date();
   }
 

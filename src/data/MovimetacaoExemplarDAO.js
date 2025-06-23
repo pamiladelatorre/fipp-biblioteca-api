@@ -5,19 +5,7 @@ import MovimetacaoExemplar from '../models/MovimetacaoExemplar.js';
 import Exemplar from '../models/Exemplar.js';
 import Acervo from '../models/Acervo.js';
 import Usuario from '../models/Usuario.js';
-
-// Função que limpa undefined, ignora campos não necessários e troca por null
-function limparDadosParaInsert(obj) {
-  const res = {};
-  for (const key in obj) {
-    // Ignora propriedades que não são colunas na tabela
-    if (key === 'exemplar' || key === 'usuario') continue;
-
-    // Substitui undefined por null
-    res[key] = obj[key] === undefined ? null : obj[key];
-  }
-  return res;
-}
+import { Result } from '../utils/Result.js';
 
 class MovimetacaoExemplarDAO extends BaseDAO {
   constructor() {
@@ -42,7 +30,7 @@ class MovimetacaoExemplarDAO extends BaseDAO {
       row.data_fim,
       row.numero_renovacao,
       row.data_criacao,
-      row.data_alteracao,
+      row.data_atualizacao,
       new Exemplar(
         row.exemplar_id,
         undefined,
@@ -76,14 +64,19 @@ class MovimetacaoExemplarDAO extends BaseDAO {
     const valores = [];
     const condicoes = [];
 
-    for (const [campoCamel, config] of Object.entries(filtro)) {
-      const campo = camelToSnake(campoCamel);
-      const { valor, like = false } =
-        typeof config === "object" && config !== null ? config : { valor: config };
+   for (const [campoCamel, config] of Object.entries(filtro)) {
+  const campo = camelToSnake(campoCamel);
+  const { valor, like = false } =
+    typeof config === "object" && config !== null ? config : { valor: config };
 
-      condicoes.push(`${campo} ${like ? "LIKE" : "="} ?`);
-      valores.push(like ? `%${valor}%` : valor);
-    }
+  // Adiciona prefixo 'me.' para evitar ambiguidade
+  const prefixo = ['status', 'etapa', 'data_inicio', 'data_prevista', 'data_fim'].includes(campo)
+    ? 'me.'
+    : ''; // deixe sem prefixo para joins como 'nome', 'titulo'
+
+  condicoes.push(`${prefixo}${campo} ${like ? "LIKE" : "="} ?`);
+  valores.push(like ? `%${valor}%` : valor);
+}
 
     if (condicoes.length > 0) {
       sql += ` WHERE ${condicoes.join(" AND ")}`;
@@ -93,10 +86,120 @@ class MovimetacaoExemplarDAO extends BaseDAO {
     return rows.map((row) => this.mapRowToEntity(row));
   }
 
-  async criar(movimentacao) {
-    const dadosLimpos = limparDadosParaInsert(movimentacao);
-    return super.inserir(dadosLimpos);
-  }
+
+async criar(movimentacao) {
+  console.log("Requisição para criar recebida:", movimentacao);
+  const entidade = MovimetacaoExemplar.criar(movimentacao);
+  console.log("Entidade:", entidade);
+
+  return this.inserir(entidade);
 }
+ async buscarEmprestimoAtivo(exemplarId, usuarioId) {
+        const sql = `
+            SELECT * FROM movimentacoes_exemplares
+            WHERE exemplar_id = ? AND usuario_id = ?
+              AND etapa = 'emprestimo' AND status = 'ativa'
+            LIMIT 1;
+        `;
+        const [row] = await query(sql, [exemplarId, usuarioId]);
+        return row ? this.mapRowToEntity(row) : null;
+    }
+
+limparDadosParaAtualizar(entidade) {
+  const dados = {
+    exemplar_id: entidade.exemplarId,
+    usuario_id: entidade.usuarioId,
+    etapa: entidade.etapa,
+    status: entidade.status,
+    grupo_id: entidade.grupoId,
+    referencia_id: entidade.referenciaId,
+    data_inicio: entidade.dataInicio,
+    data_prevista: entidade.dataPrevista,
+    data_fim: entidade.dataFim,
+    numero_renovacao: entidade.numeroRenovacao,
+    data_atualizacao: entidade.dataAtualizacao
+  };
+
+  // Corrige campos undefined para null (obrigatório para o driver MySQL)
+  for (const key in dados) {
+    if (dados[key] === undefined) {
+      dados[key] = null;
+    }
+  }
+  console.log('Dados finais para UPDATE:', dados);
+
+  return dados;
+}
+
+
+
+  async atualizar(movimentacao, conn = null) {
+    if (!(movimentacao instanceof MovimetacaoExemplar)) {
+      throw new Error("Instância inválida de MovimetacaoExemplar.");
+    }
+
+    if (!movimentacao.id) {
+      throw new Error("Movimentação precisa de ID para atualizar.");
+    }
+
+    // Usa a função para limpar os dados
+    const dados = this.limparDadosParaAtualizar(movimentacao);
+
+    // Não atualizamos data_criacao no update, remova se quiser:
+    delete dados.data_criacao;
+
+    // Remove id do objeto para não atualizar id na query
+    const { id, ...resto } = dados;
+
+    const campos = Object.keys(resto);
+    const valores = Object.values(resto);
+
+    const updates = campos.map(campo => `${campo} = ?`).join(', ');
+
+    const sql = `UPDATE ${this.tabela} SET ${updates} WHERE id = ?`;
+
+    const resultado = await query(sql, [...valores, movimentacao.id], conn);
+
+    if (resultado.affectedRows === 0) return null;
+
+    return movimentacao;
+  }
+  async obterExemplaresEmprestados(usuarioId) {
+  try {
+    const sql = `
+      SELECT 
+        e.id,
+        e.tombo AS codigo,
+        a.titulo
+      FROM movimentacoes_exemplares me
+      JOIN exemplares e ON e.id = me.exemplar_id
+      JOIN acervos a ON a.id = e.acervo_id
+      WHERE me.usuario_id = ?
+        AND me.etapa = 'emprestimo'
+        AND me.status = 'ativa'
+    `;
+    const rows = await query(sql, [usuarioId]);
+    return Result.ok(rows);
+  } catch (err) {
+    return Result.fail('Erro ao consultar exemplares emprestados.');
+  }
+
+}
+async atualizarDataPrevista(id, novaData) {
+  const sql = `UPDATE movimentacoes_exemplares SET data_prevista = ? WHERE id = ?`;
+  await query(sql, [novaData, id]);
+}
+
+
+}
+
+
+
+
+
+
+
+
+
 
 export default MovimetacaoExemplarDAO.getInstance();

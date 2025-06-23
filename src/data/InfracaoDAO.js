@@ -80,6 +80,25 @@ class InfracaoDAO extends BaseDAO {
         const rows = await query(sql, valores);
         return rows.map(row => this.mapRowToEntity(row));
     }
+
+ async atualizar(infracao) {
+    const sql = `UPDATE ${this.tabela} SET usuario_id = ?, tipo_infracao = ?, grau_infracao = ?, status = ?, motivo = ?, data_inicio = ?, data_fim = ?, data_alteracao = ? WHERE id = ?`;
+
+    const valores = [
+        infracao.usuarioId,
+        infracao.tipoInfracao,
+        infracao.grauInfracao,
+        infracao.status,
+        infracao.motivo,
+        new Date(infracao.dataInicio).toISOString().split("T")[0],
+        infracao.dataFim ? new Date(infracao.dataFim).toISOString().split("T")[0] : null, 
+        new Date(),
+        infracao.id // <- pegando o ID de dentro do objeto
+    ];
+
+    return await query(sql, valores);
+}
+
 }
 
 // Exporta instância padrão

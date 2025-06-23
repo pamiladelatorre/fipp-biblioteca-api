@@ -3,6 +3,7 @@ import Entity from '../models/Entity.js';
 import { extractEntityDataForDb } from "../utils/extractEntityDataForDb.js";
 import { camelToSnake } from '../utils/stringUtils.js';
 
+
 export default class BaseDAO {
     constructor(tabela) {
         if (new.target === BaseDAO) throw new Error(`Classe abstrata 'BaseDAO' não pode ser instanciada diretamente.`);
@@ -45,29 +46,29 @@ export default class BaseDAO {
         return rows.map(row => this.mapRowToEntity(row));
     }
   
-    async inserir(model, conn = null, excluirCampos = ['id']) {
-        if (!(model instanceof Entity)) {
-            throw new Error("Instância de entidade inválida.");
-        }
-        
+async inserir(model, conn = null, excluirCampos = ['id', 'exemplar', 'usuario']) {
+  if (!(model instanceof Entity)) {
+    throw new Error("Instância de entidade inválida.");
+  }
 
-        const dados = extractEntityDataForDb(model, excluirCampos, true);
-         console.log('[BaseDAO][inserir] Dados para INSERT:', dados);
+const dados = extractEntityDataForDb(model, [...excluirCampos, 'exemplar', 'usuario'], true);
 
-        const campos = Object.keys(dados);
-        const valores = Object.values(dados);
-        const placeholders = campos.map(() => '?').join(', ');
+  console.log('[BaseDAO][inserir] Dados para INSERT:', dados);
 
-        const sql = `INSERT INTO ${this.tabela} (${campos.join(', ')}) VALUES (${placeholders})`;
+  const campos = Object.keys(dados);
+  const valores = Object.values(dados);
+  const placeholders = campos.map(() => '?').join(', ');
 
+  const sql = `INSERT INTO ${this.tabela} (${campos.join(', ')}) VALUES (${placeholders})`;
 
-        const resultado = await execute(sql, valores, conn);
+  const resultado = await execute(sql, valores, conn);
 
-        if (!resultado.insertId) throw new Error('Falha ao inserir modelo. ID não retornado.');
-        
-        model.setIdFromDB(resultado.insertId); // Método da modelo
-        return model;
-    }
+  if (!resultado.insertId) throw new Error('Falha ao inserir modelo. ID não retornado.');
+
+  model.setIdFromDB(resultado.insertId);
+  return model;
+}
+
 
     async atualizar(model, conn = null, excluirCampos = ['dataCriacao']) {
         if (!(model instanceof Entity)) {

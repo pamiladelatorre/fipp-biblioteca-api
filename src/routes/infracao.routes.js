@@ -10,4 +10,9 @@ router.get('', InfracaoController.obterPorFiltro);
 // Cria uma nova infracao
 router.post('', InfracaoController.adicionar);
 
+// Consulta por ID
+router.get('/:id', InfracaoController.obterPorId);
+
+router.put('/:id', InfracaoController.alterar);
+
 export default router;
