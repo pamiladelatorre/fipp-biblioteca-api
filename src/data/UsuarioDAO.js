@@ -50,6 +50,46 @@ async buscarTodos() {
   return rows;
 }
 
+async buscarPorFiltro(filtros) {
+  let sql = `SELECT id, cpf, nome, data_nascimento, telefone, email, tipo_usuario, bloqueado, ativo FROM usuarios WHERE 1=1`;
+  const params = [];
+
+  if (filtros.nome) {
+    sql += ` AND nome LIKE ?`;
+    params.push(`%${filtros.nome}%`);
+  }
+
+  if (filtros.cpf) {
+    sql += ` AND cpf = ?`;
+    params.push(filtros.cpf);
+  }
+
+  if (filtros.email) {
+    sql += ` AND email LIKE ?`;
+    params.push(`%${filtros.email}%`);
+  }
+
+  if (filtros.tipoUsuario) {  // note aqui a propriedade: tipoUsuario
+    sql += ` AND tipo_usuario = ?`;
+    params.push(filtros.tipoUsuario);
+  }
+
+  if (typeof filtros.bloqueado !== 'undefined' && filtros.bloqueado !== '') {
+    sql += ` AND bloqueado = ?`;
+    params.push(filtros.bloqueado);
+  }
+
+  if (typeof filtros.ativo !== 'undefined' && filtros.ativo !== '') {
+    sql += ` AND ativo = ?`;
+    params.push(filtros.ativo);
+  }
+
+  const rows = await query(sql, params);
+  return rows;
+}
+
+
+
 
 }
 
