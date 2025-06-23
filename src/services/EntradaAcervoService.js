@@ -5,6 +5,11 @@ import { Result } from '../utils/Result.js';
 
 class EntradaAcervoService {
 
+    async obterPorId(id){
+        const entradaAcervo = await EntradaAcervoDAO.buscarPorId(id);
+        return notFoundIfNull(entradaAcervo, 'EntradaAcervo');
+    }
+
     async obterPorFiltro({ acervo, origem, contrato, empenho, doador }){
         const filtro = {
             ...(acervo && { titulo: { valor: acervo, like: true } }),

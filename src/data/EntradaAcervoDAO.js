@@ -31,7 +31,27 @@ class EntradaAcervoDAO extends BaseDAO {
         );
     } 
 
-     async buscarPorFiltro(filtro = {}) {
+    async buscarPorId(id) {
+        let sql = `
+            SELECT 
+                ea.*,
+                a.titulo,
+                ass.numero_contrato,
+                c.numero_empenho,
+                d.nome
+            FROM ${this.tabela} ea
+                INNER JOIN acervos a ON a.id = ea.acervo_id
+                LEFT JOIN assinaturas ass ON ass.id = ea.origem_id AND ea.tipo_origem = 'assinatura'
+                LEFT JOIN compras c ON c.id = ea.origem_id AND ea.tipo_origem = 'compra'
+                LEFT JOIN doadores d ON d.id = ea.origem_id AND ea.tipo_origem = 'doacao'
+            WHERE
+                ea.id = ?`;
+
+        const [row] = await query(sql, [id]);
+        return row ? this.mapRowToEntity(row) : null;
+    }
+
+    async buscarPorFiltro(filtro = {}) {
         let sql = `
             SELECT 
                 ea.*,
